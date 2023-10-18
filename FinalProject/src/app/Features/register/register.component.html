@@ -1,0 +1,72 @@
+<div class="box">
+    <div [formGroup]="form" class="indiv">
+        <h1>Register</h1>
+    <div>
+        <div class="content">
+           <span><span *ngIf="hasError('email','required')" class="asterisk">*</span>E-mail</span>
+            <input formControlName="email" type="email">
+        </div>
+        <span *ngIf="hasError('email','email')" class="warn">Email is incorret, it should contain @gmail.com</span>
+        <span *ngIf="hasError('email','required')"  class="warn">This Field is Required</span>
+    </div>
+
+
+    <div class="pass">
+    <div>
+        <div class="content">
+            <span><span *ngIf="hasError('password','required')" class="asterisk">*</span>Password</span>
+            <input formControlName="password" type="text">
+        </div>
+        <span *ngIf="hasError('password','pattern')" class="warn">Password is incorret,use only English characters </span>
+        <span *ngIf="hasError('password','required')"  class="warn">This Field is Required</span>
+        <span *ngIf="hasError('password','minlength')"  class="warn">Password minimum lenght is 7 </span>
+    </div>
+    <div>
+        <div class="content">
+            <span><span *ngIf="hasError('confirmPassword','required')" class="asterisk">*</span>Confirm Password</span>
+            <input formControlName="confirmPassword" type="text">
+        </div>
+        <span *ngIf="hasError('confirmPassword','passwordMismatch')" class="warn">Password and Confirm password should be same </span>
+        <span *ngIf="hasError('confirmPassword','required')"  class="warn">This Field is Required</span>
+    </div>
+    </div>
+    
+
+    <div>
+        <div class="content">
+            <span><span *ngIf="hasError('nickname','required')" class="asterisk">*</span>Nickname</span>
+            <input formControlName="nickname" type="text">
+        </div>
+        <span *ngIf="hasError('nickname','required')"  class="warn">This Field is Required</span>
+        <span *ngIf="hasError('nickname','pattern')" class="warn">Nickname is incorret,use only English characters numbers and "-"</span>
+    </div>
+
+    <div>
+        <div class="content">
+            <span><span *ngIf="hasError('phone','required')" class="asterisk">*</span>Phone number</span>
+            <input formControlName="phone" type="text">
+        </div>
+        <span *ngIf="hasError('phone','pattern')" class="warn">number should start with "+995" and should be 13 digits</span>
+        <span *ngIf="hasError('phone','required')"  class="warn">This Field is Required</span>
+    </div>
+
+
+    <!-- amis gaqrobazea bazri!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+    <!-- <div>
+        <div class="content">
+            <span><span *ngIf="hasError('webkitURL','required')" class="asterisk">*</span>Website</span>
+            <input formControlName="webkitURL" type="url">
+        </div>
+        <span *ngIf="hasError('webkitURL','pattern')" class="warn">Should contain "https://"</span>
+        <span *ngIf="hasError('webkitURL','required')"  class="warn">This Field is Required</span>
+    </div> -->
+
+    <div id="check">
+        <input formControlName="checkbox" type="checkbox">
+        <span>I have read the <span style="color: skyblue;">agreement</span></span>
+    </div>
+    <button 
+    [disabled]="disabled()"  
+    (click)="onSubmit()">{{action}}</button>
+</div>
+</div>

@@ -1,0 +1,55 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    .border{
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        .Login{
+            height:300px;
+            width: 350px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            gap: 10px;
+            h1{
+                font-size: 45px;
+            }
+            input{
+                height: 45px;
+                font-size: 20px;
+                border-radius: 3px;
+                border:1px solid rgb(210, 209, 209);
+            }
+            button{
+                height: 40px;
+                color: white;
+                background-color: blueviolet;
+                border:none;
+                border-radius: 3px;
+            }
+            .register{
+                background-color: white;
+                color: blue;
+                cursor: pointer;
+                width: 60px;
+                align-self: center;
+            }
+            .register:hover{
+                text-decoration: underline;
+            }
+            .submit:hover{
+                background-color: rgb(104, 6, 195);
+            }
+        }
+    }
+    
+}
+

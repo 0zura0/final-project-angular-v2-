@@ -1,0 +1,56 @@
+@import '../../shared/scss/pallete';
+
+.allwrapper{
+    margin: auto;
+    display: grid;
+    width: 80vw;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: 20px 50px 90px 200px auto;
+    .topbar{
+        height: 20px;
+        grid-column-start:1;
+        grid-column-end: 4;
+    }
+    .left{
+        grid-column-start:1;
+        grid-column-end: 2;
+
+        grid-row-start: 2;
+        grid-row-end: 5;
+
+    }
+    .top{
+        grid-column-start:2;
+        grid-column-end: 3;
+
+        grid-row-start: 2;
+        grid-row-end: 4;
+
+        border: 1px solid black;
+        border-radius: 10px;
+        background-color: $button;
+    }
+    .outlet{
+        grid-column-start:2;
+        grid-column-end: 3;
+
+        grid-row-start: 4;
+        grid-row-start: 6;
+
+        height: 20px;
+        // background-color: red;
+
+    }
+    .right{
+        grid-column-start:3;
+        grid-column-end: 4;
+
+        grid-row-start: 2;
+        grid-row-end: 5;
+
+        border: 1px solid black;
+        margin-left: 5px
+    }
+
+}
+
