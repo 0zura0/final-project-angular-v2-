@@ -8,16 +8,17 @@
         <img class="imageinPopup" src="" alt="">
         <div class="name">
     <div class="withnick">
-        <span>Name</span>
-        <span class="nicname">@nickname</span>
+        <span>{{userDataService.firstname+' '+userDataService.lastname}}</span>
+        <span class="nicname">@{{userDataService.nickname}}</span>
     </div>
         <span class="visible"><i class="fa-solid fa-globe"></i>anyone</span>
         </div>
     </div>
-    <div class="areawrapper">
-        <textarea class="textarea" name="area" rows="10">
+    <div [formGroup]="form" class="areawrapper">
+        <textarea formControlName="textarea" class="textarea" name="area" rows="10">
 
         </textarea>
+        <span *ngIf="form.status!=='VALID' && postPressed">Please write text in Text area</span>
     </div>
-    <input class="postbutton" type="button" value="Post">
+    <input (click)="log()" class="postbutton" type="button" value="Post" [mat-dialog-close]="true">
 </div>

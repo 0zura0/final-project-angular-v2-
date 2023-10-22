@@ -6,15 +6,17 @@
 
 
 <div class="left">
-<app-left-bar></app-left-bar>
+<app-left-bar *ngIf="manipulationService.leftbarDisabled"></app-left-bar>
+</div>
+<!-- es gasasworebelia -->
+<div class="top" 
+[class.topclassCostum]="manipulationService.topBarsDisabled" 
+*ngIf="manipulationService.wholeTopDiv">
+<app-topcomponent *ngIf="manipulationService.topBarsDisabled" ></app-topcomponent>
 </div>
 
-<div class="top">
-<app-topcomponent ></app-topcomponent>
-</div>
-
-<div class="right">
-<app-right-bar ></app-right-bar>
+<div class="right" [class.rightstyleCustum]="manipulationService.rightBarsDisabled">
+<app-right-bar *ngIf="manipulationService.rightBarsDisabled" ></app-right-bar>
 </div>
 <router-outlet class="outlet"></router-outlet>
 </div>

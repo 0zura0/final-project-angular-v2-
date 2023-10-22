@@ -1,0 +1,72 @@
+@import '../../shared/scss/pallete';
+.profile{
+    height: 100%;
+    background-color: $bakground;
+    .closeProfile{ //direqtivat unda gavitano ar damaviwydes
+        position: absolute;
+        background-color: red;
+        z-index: 2;
+    }
+    .background{
+        background-color: rebeccapurple;
+        width: 100%;
+        height: 120px;
+        position: relative;
+    }
+    .profileimage{
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        top: 70px;
+        background-color: red;
+        margin-left: 20px;
+        border-radius: 5px;
+    }
+    .profilenames{
+        position: absolute;
+        top: 200px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        :first-child{
+            font-size: 26px;
+        }
+        :last-child{
+            font-size: 20px;
+        }
+    }
+    .profilebuttons{
+        position: absolute;
+        display: flex;
+        bottom: 100px;
+        margin-left: 20px;
+        width: 40%;
+        gap: 10px;
+        button{
+            width: 100px;
+            height: 30px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        :first-child{
+            border-radius: 10px;
+            background-color: cornflowerblue;
+        }
+        :first-child:hover{
+            background-color: white;
+            color: cornflowerblue;
+        }
+        :last-child{
+            color: cornflowerblue;
+            border: 1px solid cornflowerblue;
+            border-radius: 3px;
+        }
+        :last-child:hover{
+            background-color: cornflowerblue;
+            color: white;
+        }
+    }
+}

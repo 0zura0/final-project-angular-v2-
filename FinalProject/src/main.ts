@@ -4,16 +4,19 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app/Routes/app-routing.module';
 import { AppComponent } from './app/Core/appComp/app.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
 
 
-// platformBrowserDynamic().bootstrapModule(AppModule)
-//   .catch(err => console.error(err));
+
 bootstrapApplication(AppComponent
   ,{
   providers:[
     importProvidersFrom(RouterModule.forRoot(routes)),
-    provideAnimations()
+    provideAnimations(),  
+    provideHttpClient()
 ]
 }
 )
   .catch(err => console.error(err));
+
+

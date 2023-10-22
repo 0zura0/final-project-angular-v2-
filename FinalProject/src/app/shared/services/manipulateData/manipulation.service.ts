@@ -5,6 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class ManipulationService {
   constructor() { }
-
-
+  leftbarDisabled = false;
+  topBarsDisabled = false;
+  rightBarsDisabled = false;
+  wholeTopDiv = false;
+  logedIn = false;
 }

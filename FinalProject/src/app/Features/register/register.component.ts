@@ -1,21 +1,28 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IUser } from 'src/app/shared/Interfaces/interfaces';
+import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
+import { INewUser } from 'src/app/shared/Interfaces/Iauthorization/newUser.model';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent {
   private isSubmited=false;
   public action:string='Register';
-  constructor(private formBuilder: FormBuilder,private router:Router){}
+  constructor(private formBuilder: FormBuilder,
+              private router:Router,
+              public manipulate : ManipulationService,
+              private authService:AuthService){}
   ngOnInit(): void {
+    //თუ დრო დამრჩა აფდეითს მერე გავაკეთებ
     // if(this.container.action=='Update'){
     //   this.action=this.container.action
     //   this.form.get('email')?.setValue(this.container.tempobject?.Email as string)
@@ -31,40 +38,56 @@ export class RegisterComponent {
   }
 
   public form = this.formBuilder.group({
+    firstname:['', [Validators.required]],
+    lastname:['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/), Validators.minLength(7)]],
     confirmPassword: ['', [Validators.required]],  //აქ დავამატებ
     nickname: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9-]+$/)]],
     phone: ['', [Validators.required, Validators.pattern(/^\+995\d{9}$/)]],
-    webkitURL: ['', [Validators.required, Validators.pattern(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)]],
-    checkbox: ['', [Validators.requiredTrue]],
   },
   {validators: this.passwordMatchValidator()},
   )
 
  
-
   public onSubmit(){
     console.log(this.form.value);
     
-    // this.isSubmited=true;
+    this.isSubmited=true;
+    if(this.form.valid){
+        this.router.navigate(["/Login"])
+        this.manipulate.wholeTopDiv=true //აქ ჩნდება
+
+        let obj : INewUser={
+          firstname : this.form.get('firstname')?.value as string,
+          lastname: this.form.get('lastname')?.value as string,
+          email: this.form.get('email')?.value as string,
+          password: this.form.get('password')?.value as string,
+          nickname: this.form.get('nickname')?.value as string,
+          phone: this.form.get('phone')?.value as string,
+        }
+        this.authService.register(obj).subscribe(user => {console.log(user);})
+        console.log(obj);
+        
+  }
+
     // if(this.form.valid){
-    //   let obj:IUser = {
-    //     Email: this.form.get('email')?.value,
-    //     password: this.form.get('password')?.value,
-    //     confirmPasswor.value
-    //     nickname:this.form.get('nickname')?.value,
-    //     phone: this.form.get('phone')?.value,
-    //     website: this.form.get('webkitURL')?.value,
+    //   // let obj:IUser = {
+    //   //   Email: this.form.get('email')?.value,
+    //   //   password: this.form.get('password')?.value,
+    //   //   confirmPasswor.value
+    //   //   nickname:this.form.get('nickname')?.value,
+    //   //   phone: this.form.get('phone')?.value,
+    //   //   website: this.form.get('webkitURL')?.value,
+    //   // }
+    //   this.container.myContainer.set(this.form.get('email')?.value,obj)
+    //   this.router.navigate(["/Login"])
+    //   if(this.container.action==='Update'){
+    //     this.router.navigate(['/Users'])
+    //   }else{
+    //     this.router.navigate(["/Login"])
     //   }
-      // this.container.myContainer.set(this.form.get('email')?.value,obj)
-      // this.router.navigate(["/Login"])
-      // if(this.container.action==='Update'){
-      //   this.router.navigate(['/Users'])
-      // }else{
-      //   this.router.navigate(["/Login"])
-      // }
-      // console.log(this.container.myContainer.get(this.form.get('website')?.value));
+    //   console.log(this.container.myContainer.get(this.form.get('website')?.value));
     // }
   }
 
@@ -86,13 +109,11 @@ if(confirmPassword?.value!==''){
   }
   
   public disabled(): boolean {
-    // if(this.form.get('password')?.errors==null 
-    //   && this.form.get('confirmPassword')?.errors===null
-    //   && this.form.get('checkbox')?.errors==null
-    // ){      
-    //   return false;
-    // }
-    // return true;
+    if(this.form.get('password')?.errors==null 
+      && this.form.get('confirmPassword')?.errors===null
+    ){
+      return false;
+    }
     return false
   }
 }

@@ -25,20 +25,14 @@
 
         grid-row-start: 2;
         grid-row-end: 4;
-
-        border: 1px solid black;
-        border-radius: 10px;
-        background-color: $button;
     }
     .outlet{
         grid-column-start:2;
         grid-column-end: 3;
 
-        grid-row-start: 4;
-        grid-row-start: 6;
+        grid-row-start: 5;
 
-        height: 20px;
-        // background-color: red;
+        // height: 20px;
 
     }
     .right{
@@ -47,10 +41,16 @@
 
         grid-row-start: 2;
         grid-row-end: 5;
-
+    }
+    .rightstyleCustum{
         border: 1px solid black;
         margin-left: 5px
     }
 
+}
+.topclassCostum{
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: $button;
 }
 

@@ -1,24 +1,47 @@
-import { Body, Controller, Get, Post, Put,Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put,Param, Delete, Query, Header, UseGuards,Request } from '@nestjs/common';
 import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
 import { Observable, from } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { JwtGuard } from 'src/auth/guards/jwt/jwt.guard';
 
 @Controller('feed')
 export class FeedController {
 constructor(private FeedService: FeedService){}
 
+@UseGuards(JwtGuard)
 @Post()
-create(@Body() post :FeedPost):Observable<FeedPost>{ 
+create(@Body() post :FeedPost, @Request() req):Observable<FeedPost>{ 
     console.log(post);
-          
-    return this.FeedService.createPost(post)
+    // console.log(req.body);
+    
+    return this.FeedService.createPost(req.user, post)
 }
 
+
+// @Get()
+// findSelected(@Query('take') take:number=1,@Query('skip') skip : number=1):Observable<FeedPost[]> {
+//     take=take>20 ? 20 : take;
+//     return this.FeedService.findPosts(take,skip);
+// }
+
+
+
+// @Get()
+// async getPostsWithAuthors(@Query('take') take:number=1,@Query('skip') skip : number=0) {
+//   const { posts } = await this.FeedService.findPosts(take,skip);
+//   return { posts };
+// }
+
+
+
 @Get()
-findAllPosts():Observable<FeedPost[]> {
-    return this.FeedService.findAllPosts();
-}
+  getPostsWithAuthors(@Query('take') take:number=1,@Query('skip') skip : number=1):Observable<[FeedPost[], number]> {
+    return this.FeedService.getPostsWithAuthors(take,skip);
+  }
+
+
+
 
 @Put(':id')
 update(

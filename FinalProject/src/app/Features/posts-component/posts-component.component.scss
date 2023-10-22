@@ -1,0 +1,49 @@
+.postsWrapper{
+    background-color: rgb(249, 221, 203);
+    padding: 10px;
+    margin-top: 15px;
+    border: 1px solid black;
+    border-radius: 10px;
+    position: relative;
+    .trash{
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        height: 25px;
+        width: 25px;
+        border: none;
+        cursor: pointer;
+        color: red;
+        background-color: white;
+        border-radius: 3px;
+    }
+    .trash:hover{
+        background-color: orange;
+    }
+    .information{
+        display: flex;
+        .userPhoto{
+            width: 50px;
+            height: 50px;
+        }
+        .names{
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+            line-height: 13px;
+            margin-top: 10px;
+            font-size: 16px;
+            .small{
+                font-size: 12px;
+            }
+        }
+    }
+        .actual{
+        font-family: sans-serif;
+        font-size: 17px;
+        }
+
+}
+.postsWrapper:last-child{
+    padding-bottom: 10px;
+}

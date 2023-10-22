@@ -1,0 +1,14 @@
+<div *ngFor="let obj of AllLoadPosts" (scroll)="onScroll($event)">
+<div class="postsWrapper">
+    <button *ngIf="userData.email==obj.author.email" class="trash"><i class="fa-solid fa-trash"></i></button>
+    <div class="information">
+        <img class="userPhoto" src="" alt="">
+        <div class="names">
+            <span class="name">{{obj.author.firstname+" "+obj.author.lastname}}</span>
+            <span class="small"><span>@</span>{{obj.author.nickname}}</span>
+            <span class="small">{{changeDate(obj.created_at)}}</span>
+        </div>
+    </div>
+    <p class="actual">{{obj.body}}</p>
+</div>
+</div>

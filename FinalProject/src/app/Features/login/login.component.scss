@@ -1,8 +1,4 @@
-*{
-    margin: 0;
-    padding: 0;
-}
-
+@import '../../shared/scss/pallete';
 .box{
     display: flex;
     justify-content: center;
@@ -19,6 +15,7 @@
             flex-direction: column;
             background-color: white;
             gap: 10px;
+            background-color: $bakground;
             h1{
                 font-size: 45px;
             }
@@ -41,6 +38,7 @@
                 cursor: pointer;
                 width: 60px;
                 align-self: center;
+                background-color: $bakground;
             }
             .register:hover{
                 text-decoration: underline;

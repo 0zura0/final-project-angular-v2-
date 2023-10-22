@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import { LoginComponent } from '../login/login.component';
 import { WritePostComponent } from '../write-post/write-post.component';
 
 
@@ -11,20 +10,16 @@ import { WritePostComponent } from '../write-post/write-post.component';
   imports: [CommonModule,MatDialogModule],
   templateUrl: './topcomponent.component.html',
   styleUrls: ['./topcomponent.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class TopcomponentComponent {
 
-  constructor(public dialog: MatDialog){}
-
+  constructor(public dialog: MatDialog,){}
 
   public openDiealogue(){
     this.dialog.open(WritePostComponent,{
       width:'450px',
       height:'400px',
-      position: {
-        top: '-250px',
-        left: '550px',
-      },
     })
   }
 
