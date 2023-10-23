@@ -10,4 +10,11 @@ export class ManipulationService {
   rightBarsDisabled = false;
   wholeTopDiv = false;
   logedIn = false;
+
+
+  DbItems:number = 0; 
+  public AllLoadPosts: any = [];
+  skipPosts:number = 0;
+  isLoading = false;
+
 }

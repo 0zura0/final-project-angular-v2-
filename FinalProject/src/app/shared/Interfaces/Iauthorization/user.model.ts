@@ -9,4 +9,5 @@ export interface IUser{
     email: string,
     phone: string,
     role: Role 
+    imagePath?:string
 }

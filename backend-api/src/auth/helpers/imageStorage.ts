@@ -3,14 +3,15 @@ import { diskStorage } from "multer";
 import {v4 as uuidv4 } from 'uuid'
 
 import fs from "fs";
-import FileTypes from "file-type";
+import FileTypes, { FileTypeResult } from "file-type";
 
 import path = require("path");
+import { Observable, from, of, switchMap } from "rxjs";
 
-type validfileType ='png' | 'jpg' | 'jpeg';
+type validfileType ="apng" | 'jpg' | 'jpeg';
 type validmimetype ='image/png' | 'image/jpg' | 'image/jpeg';
 
-const valiFileArr: validfileType[] =['png','jpg','jpeg'] 
+const valiFileArr: validfileType[] =['apng','jpg','jpeg'] 
 const validMimeTypeArr: validmimetype[] =[ 
     'image/png',
     'image/jpg',
@@ -31,3 +32,17 @@ export const saveImageFileToStorage = {
         allowedMimeTypes.includes(file.mimetype) ? cb(null,true):cb(null,false);
        } 
 }
+
+// export const IsFileExtensionSafe=(FullfilePath:string):Observable<boolean>=>{
+//  return from(FileTypes.fileTypeFromFile(FullfilePath)).pipe(  //ეს ფუნქცია აბრუნებს extentions და Mime tipe-ს
+//     switchMap((value:FileTypeResult,index:number):Observable<boolean>=>{
+//         if(value)return of(false);
+
+//         const isFiletypeLegit = valiFileArr.includes(value.ext)
+//         const ifmimeTypeLegit = validMimeTypeArr.includes(value.mime)
+
+//         const isfileLegit=isFiletypeLegit && ifmimeTypeLegit
+//         return of(isFiletypeLegit)
+//     })
+//  )
+// }

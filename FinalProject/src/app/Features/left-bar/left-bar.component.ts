@@ -27,4 +27,9 @@ export class LeftBarComponent {
     this.manipulatesaerviuce.rightBarsDisabled=false
     this.manipulatesaerviuce.logedIn=false;
   }
+  
+  openPdf() {
+    const pdfLink = document.getElementById('pdfLink') as HTMLAnchorElement;
+    pdfLink.click();
+  }
 }

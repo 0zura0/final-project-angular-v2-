@@ -34,7 +34,6 @@ export class RegisterComponent {
     //   console.log(this.container.tempobject?.Email);
     // }
     // console.log(this.container.action=='Update');
-    
   }
 
   public form = this.formBuilder.group({

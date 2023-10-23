@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, from, map } from 'rxjs';
 import { UserEntity } from 'src/auth/models/user.entity';
 import { User } from 'src/auth/models/user.interface';
+import { FeedPost } from 'src/feed/models/post.interface';
 import { Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
@@ -29,6 +30,8 @@ export class UserService {
             return from(this.UserRepository.update(id, user));
         }
 
+
+
     FindImageNameByUserID(id:number):Observable<string>{
         return from(this.UserRepository.findOne({where:{id}})).pipe(
             map((user:User)=>{
@@ -38,6 +41,10 @@ export class UserService {
         )
     }
 
+    // GetUserWithallPostData(email:string, password:string):Observable<[FeedPost]>{
+    //     return from(this.UserRepository.findOne({select: ['id', 'firstname', 'lastname', 'nickname','email', 'password', 'phone', 'role'],
+    //     where:{email},relations:['feedPosts']}))
+    // }
 
     
 }

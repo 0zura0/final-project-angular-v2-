@@ -1,7 +1,10 @@
 <div class="profile">
     <button class="closeProfile" mat-buttin mat-dialog-close>x</button>
     <div class="background"></div>
-    <img class="profileimage" src="" alt="">
+    <div>
+    <input #fileUpload (change)="onFileSelect($event)" type="file" style="display: none;">
+    <img (click)="fileUpload.click()" style="cursor: pointer;" class="profileimage" src="" alt="">
+    </div>
     <div class="profilenames">
         <span>{{userDataService.firstname+" "+userDataService.lastname}}</span>
         <span>@{{userDataService.nickname}}</span>

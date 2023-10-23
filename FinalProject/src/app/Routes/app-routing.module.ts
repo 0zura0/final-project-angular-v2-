@@ -15,8 +15,8 @@ export const routes: Routes = [
     {
       path: 'LogedIn',
       loadComponent: () => import('../Features/posts-component/posts-component.component').then((c) =>c.PostsComponentComponent),
-      // canActivate:[authGuard],
-      // canDeactivate:[doNotBackGuard]
+      canActivate:[authGuard],
+      canDeactivate:[doNotBackGuard]
     },
 ];  
 

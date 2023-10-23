@@ -24,7 +24,8 @@
     <div style="display: none" class="indicator">1</div>
 </button>
 
-<button class="leftButtons">
+<button (click)="openPdf()" class="leftButtons">
+    <a id="pdfLink" style="display: none;" href="../../../assets/sample.pdf" target="_blank"></a>
     <i class="fa-solid fa-lock"></i>
     privacy
 </button>

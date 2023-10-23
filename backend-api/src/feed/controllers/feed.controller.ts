@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put,Param, Delete, Query, Header, UseGuards,Request } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put,Param, Delete, Query, Header, UseGuards,Request, Res } from '@nestjs/common';
 import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
 import { Observable, from } from 'rxjs';
@@ -40,9 +40,6 @@ create(@Body() post :FeedPost, @Request() req):Observable<FeedPost>{
     return this.FeedService.getPostsWithAuthors(take,skip);
   }
 
-
-
-
 @Put(':id')
 update(
     @Body() feedpost :FeedPost,
@@ -56,7 +53,11 @@ deletePost(@Param()id :number):Observable<DeleteResult>{
     return this.FeedService.deletePost(id);
 }
 
-
+@Get('image/:filename')
+findImageByFilename(@Param('fileName') fileName:string,@Res() res){
+  if(!fileName || ['null','[null]'].includes(fileName)) return;
+  return res.sendFile(fileName,{root:"./images"});
+}
 
 
 }

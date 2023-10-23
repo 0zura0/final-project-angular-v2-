@@ -1,4 +1,4 @@
-<div *ngFor="let obj of AllLoadPosts" (scroll)="onScroll($event)">
+<div *ngFor="let obj of this.manipulationService.AllLoadPosts" (scroll)="onScroll($event)">
 <div class="postsWrapper">
     <button *ngIf="userData.email==obj.author.email" class="trash"><i class="fa-solid fa-trash"></i></button>
     <div class="information">
