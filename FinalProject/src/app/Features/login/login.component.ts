@@ -45,8 +45,6 @@ export class LoginComponent {
     this.manipulatesaerviuce.wholeTopDiv=false
   }
   public onSubmit(){
-
-    // console.log(this.form.value);
         let loginObj ={
           email: this.form.get('Email')?.value as string,
           password:this.form.get('password')?.value as string,

@@ -11,6 +11,7 @@ import { ManipulationService } from 'src/app/shared/services/manipulateData/mani
 import { GetpostsService } from 'src/app/shared/services/getposts/getposts.service';
 import { IPost } from 'src/app/shared/Interfaces/Post/IPots';
 import { User } from './models/user.interface';
+import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
 
 @Component({
   selector: 'app-write-post',
@@ -27,7 +28,8 @@ export class WritePostComponent {
               private formbuilder: FormBuilder,
               private manipulationService:ManipulationService,
               private getpostsService:GetpostsService,
-              private Ref:ChangeDetectorRef){}
+              private Ref:ChangeDetectorRef,
+              public subjectsService:SubjectsService){}
 
   public postPressed:boolean = false;
   public isvalid:boolean = false;
@@ -35,42 +37,56 @@ export class WritePostComponent {
       textarea:['', Validators.required]
     });
 
+
+
   log(){
     this.manipulationService.isLoading=true;
-    this.postPressed=true;
+    // this.postPressed=true;
     if(this.form.valid){
     this.PostDataFromTextarea()
-    }
-    
+  
     setTimeout(() => {
-    this.getAuthorAndPoststByid(parseInt(this.userDataService.id)).subscribe((author)=>{
-      const length = author.feedPosts?.length as number-1
-      const feed = author.feedPosts?.at(length)
-      let mynewPost ={
+    this.getAuthorAndPoststByid(this.userDataService.id).subscribe((author)=>{
+      const feeds = author.feedPosts as IPost[];
+      console.log(author);
+      const sortedFeeds = feeds.sort((a,b)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
+      console.log(sortedFeeds);
+      const feed = sortedFeeds.at(0) as IPost
+      console.log(feed);
+      
+      
+      let mynewPost:FeedPostResponse ={
         author: {
-        email: author.email,
-        firstname: author.firstname,
-        id: author.id,
-        imagePath: author.imagePath,
-        lastname: author.lastname,
-        nickname: author.nickname,
-        phone: author.phone,
-        role: author.role
+        email: author.email as string,
+        firstname: author.firstname as string,
+        id: author.id as number,
+        imagePath: author.imagePath as string,
+        lastname: author.lastname as string,
+        nickname: author.nickname as string,
+        phone: author.phone as string,
+        role: author.role as "user",
       },
-        body: feed?.body,
+        body: feed.body as string,
         created_at: feed?.created_at,
         id:feed?.id
-      }      
-      this.manipulationService.AllLoadPosts =[mynewPost,...this.manipulationService.AllLoadPosts]
-      console.log(this.manipulationService.AllLoadPosts);
-      
+      }
+
+      this.subjectsService.LocalArray=[mynewPost,...this.subjectsService.LocalArray]
+      this.subjectsService.localPostIdarray.push(feed?.id) 
+      this.subjectsService.arraySubject.next(this.subjectsService.LocalArray)     
     })
     }, 100);
+  }
     this.manipulationService.isLoading=false; 
   }
 
+    public headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
   PostDataFromTextarea(){
-    return this.writePostService.PostThePost(this.form.get('textarea')?.value as string).subscribe()
+    return this.writePostService.PostThePost(this.form.get('textarea')?.value as string,this.headers).subscribe()
   }
 
   getAuthorAndPoststByid(id:number){

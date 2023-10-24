@@ -17,4 +17,6 @@ export class ManipulationService {
   skipPosts:number = 0;
   isLoading = false;
 
+  localPostIdarray:number[]=[]
+
 }

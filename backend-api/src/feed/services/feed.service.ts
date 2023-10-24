@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FeedPost } from '../models/post.interface';
 import { Observable, from, map } from 'rxjs';
 import { User } from 'src/auth/models/user.interface';
+import { log } from 'console';
 
 @Injectable()
 export class FeedService {
@@ -15,6 +16,7 @@ export class FeedService {
 
 createPost( user:User,  feedpost:FeedPost):Observable<FeedPost> {
     feedpost.author=user
+    console.log(user);
     return from(this.feedPostrepository.save(feedpost));
 }
 

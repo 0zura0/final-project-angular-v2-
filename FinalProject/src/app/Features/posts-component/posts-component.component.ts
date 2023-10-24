@@ -4,9 +4,11 @@ import { GetpostsService } from 'src/app/shared/services/getposts/getposts.servi
 import { HttpClientModule } from '@angular/common/http';
 import { IPost } from 'src/app/shared/Interfaces/Post/IPots';
 import { LoginService } from '../login/services/login.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap } from 'rxjs';
 import { UserDataService } from 'src/app/shared/services/manipulateData/user-data.service';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
+import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
+import { FeedPostResponse } from 'src/app/shared/Interfaces/Post/feedPostResponse';
 
 
 @Component({
@@ -22,72 +24,76 @@ export class PostsComponentComponent implements OnInit {
 constructor(private PostService : GetpostsService,
             private Ref:ChangeDetectorRef,
             public userData:UserDataService,
-            public manipulationService:ManipulationService){}
+            public manipulationService:ManipulationService,
+            private LoginService:LoginService,
+            public subjectsService:SubjectsService){}
+
 private takeNum=5;
 private skipnum=0;
 private size!:number;
 private isLoading:boolean = false;
 
   ngOnInit(): void {
-    this.PostService.GetSelectedPosts(`take=${this.takeNum}&skip=${this.skipnum}`).subscribe((posts:[IPost[],number])=>{      
+      this.PostService.GetSelectedPosts(`take=${this.takeNum}&skip=${this.skipnum}`).subscribe((posts:[FeedPostResponse[],number])=>{      
       const [ActualPosts,number] = posts
-      let newarr = ActualPosts.reverse()
-      for(let i = 0;i<newarr.length; i++) {
-        this.manipulationService.AllLoadPosts.push(newarr[i]);  
+
+      for(let i = 0;i<ActualPosts.length; i++) {
+        this.subjectsService.LocalArray.push(ActualPosts[i]);  
       }
-      this.manipulationService.DbItems=number
-      console.log("allposts: ");
+
       this.manipulationService.skipPosts+=this.takeNum;
-      this.Ref.detectChanges();           //i want to change this
+    //   this.Ref.detectChanges();           //i want to change this
+    this.subjectsService.arraySubject.next(this.subjectsService.LocalArray)
       this.manipulationService.isLoading = false;
-      console.log(this.manipulationService.skipPosts);
-    }) 
-    console.log('stril ngonInit');
-    };
-
-  private queryParam:string = '';
-  private numberOfPosts:number = 1;
-  private disabled:boolean = false;
+    }
+    )}
 
 
 
+  private queryParam:string = '';    //საწყისი ქვერი
+  private numberOfPosts:number = 1;  //რამდენი უნდა წამოიღოს
+  private disabled:boolean = false;  // ეს რა ჩემ ფეხებათ მინდა არც ვიცი
+  
+  
 
   public getposts(event:any=''){
     this.manipulationService.isLoading = true;
-    console.log('queryParam');
-    
     this.queryParam = `take=${this.numberOfPosts}&skip=${this.manipulationService.skipPosts}`;
-    console.log("queryParamueryparameter is ",this.queryParam);
+
+    console.log("queryParamueryparameter is: ",this.queryParam);
     
-    console.log(this.queryParam);
-    if(!this.disabled){
-      console.log("in disabled state");
-      console.log("size is"+this.size);
-      console.log("manipulation service skippost is ",this.manipulationService.skipPosts);
+    // if(!this.disabled){
+
+      // if(this.manipulationService.skipPosts === this.manipulationService.DbItems){
+      //   event.target.disabled = true;
+      //   this.disabled=true      
+      // }
+      // console.log("event target disabeled: ");
       
-      if(this.manipulationService.skipPosts === this.manipulationService.DbItems){
-        event.target.disabled = true;
-        this.disabled=true      
-      }
-    this.PostService.GetSelectedPosts(this.queryParam).subscribe((posts:[IPost[],number])=>{
+      // console.log(event.target.disabled);
+      
+
+    this.PostService.GetSelectedPosts(this.queryParam).subscribe((posts:[FeedPostResponse[],number])=>{
       const [ActualPosts,number] = posts
-      this.size=number;
-      console.log(ActualPosts);
-      for(let i = 0;i < ActualPosts.length; i++) {
-        this.manipulationService.AllLoadPosts.push(ActualPosts[i]);
+      if(ActualPosts.length == 0){
+        this.isLoading=false;
+        return
       }
-      this.manipulationService.DbItems=number-1 
+      if(this.subjectsService.localPostIdarray.includes(ActualPosts[0].id)){
+        this.manipulationService.skipPosts+=1;
+        this.isLoading=false;
+        return
+      }
+      for(let i = 0;i < ActualPosts.length; i++) {
+        this.subjectsService.LocalArray.push(ActualPosts[i])
+      }
       this.manipulationService.skipPosts+=1;
-      this.Ref.detectChanges();                    //i want to change this
       this.manipulationService.isLoading = false;
-      console.log(this.manipulationService.skipPosts);
+      this.subjectsService.arraySubject.next(this.subjectsService.LocalArray)
+      console.log('done');
+      
     })
   }
-  }
-
-
-
-
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event) {
@@ -95,11 +101,9 @@ private isLoading:boolean = false;
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
-
-    const remainingHeight = documentHeight - (scrollY + windowHeight);    
+    const remainingHeight = documentHeight - (scrollY + windowHeight);  
     if (remainingHeight <= 1 && !this.manipulationService.isLoading) {
-      console.log(window.innerHeight + window.scrollY);
-      console.log(window.scrollY);
+
       this.getposts(event);
     }
   }
@@ -119,6 +123,15 @@ private isLoading:boolean = false;
       return `${hours}h ago`;
     } else {
       return `${minutes}m ago`;
+    }
+  }
+
+  public ImageNames(name: string):string{
+    if(name==null){
+      console.log(this.LoginService.getDefaultFullImagePath());
+      return this.LoginService.getDefaultFullImagePath()
+    }else{
+      return this.LoginService.getFullImagePath(name)
     }
   }
   }

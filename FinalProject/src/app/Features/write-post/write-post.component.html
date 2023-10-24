@@ -5,7 +5,7 @@
     </div>
     <hr>
     <div class="photo">
-        <img class="imageinPopup" src="" alt="">
+        <img class="imageinPopup" [src]="subjectsService.newpath$ | async" alt="">
         <div class="name">
     <div class="withnick">
         <span>{{userDataService.firstname+' '+userDataService.lastname}}</span>

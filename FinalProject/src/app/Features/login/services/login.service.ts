@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
@@ -20,7 +20,7 @@ export class LoginService {
     ) { }
 
 
-    private userSubject = new BehaviorSubject<IUser | null>(null);
+    public userSubject = new BehaviorSubject<IUser | null>(null);
     
     get isUserLogedIn():Observable<boolean> {                       //ეს აბრუნებს თუ დალოგინებულია TRUE ს და თუ არარის FALSE-ს
         return this.userSubject.asObservable().pipe(
@@ -47,16 +47,15 @@ export class LoginService {
     }
 
 
-    get UserFullName():Observable<String>{  //ამას მოაქვს უბრალოდ ბეჰავიორ საბჯექთის გადაცემული მნიშვნელობიდან სახელი და გვარი
+    get UserFullName():Observable<string>{  //ამას მოაქვს უბრალოდ ბეჰავიორ საბჯექთის გადაცემული მნიშვნელობიდან სახელი და გვარი
       return this.userSubject.asObservable().pipe(
-        switchMap((user:IUser | null):Observable<String>=>{
+        switchMap((user:IUser | null):Observable<string>=>{
           let User = user as IUser;
-          const fullname=User.firstname+User.lastname
+          const fullname=User.firstname+" "+User.lastname
           return of(fullname);
         })
       )
     }
-
 
     getDefaultFullImagePath():string{                           //ამას მოაქვს დეფაულტ ფოტო ბაზიდან (როცა ატვირთული არ აქვს ფოტო)
       return 'http://localhost:3000/api/feed/image/blank.jpg';
@@ -70,6 +69,7 @@ export class LoginService {
       return this.userSubject.asObservable().pipe(
         switchMap((User:IUser | null):Observable<string> =>{
           const user = User as IUser;
+          console.log(User);
           const DoesAuthorHaveImage = !!user?.imagePath; //ეს კაი რამე ვიპოვე თუ არსებობს imagepath მაშინ იქნება true თუ არადა false
           let fullImagePath = this.getDefaultFullImagePath()
           if(DoesAuthorHaveImage){
@@ -89,6 +89,7 @@ export class LoginService {
       return this.http.get<{imageName:string}>(`${enviroment.ApiUrl}/user/imageName`)
     }
 
+
     UpdateUserImagePath(imagePath:string):Observable<IUser>{
       return this.userSubject.pipe(
         map((user:IUser|null):IUser =>{
@@ -101,11 +102,15 @@ export class LoginService {
       )}
 
 
-    UploadUserImage(formData:FormData):Observable<{modifiedFileName:string}>{  // როცა FormData ს გადავცემ აღარ სჭირდება დამატებითი ჰედერები
+      private headers = new HttpHeaders({
+        // 'Content-Type': 'undefined',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      });
+
+    UploadUserImage(formData:FormData):Observable<{modifiedFileName:string}>{
+
       return this.http.post<{modifiedFileName:string}>(
-        `${enviroment.ApiUrl}/user/upload`,
-        formData
-      ).pipe(
+        `${enviroment.ApiUrl}/user/upload`,formData,{headers:this.headers}).pipe(
         tap((modifiedFileName)=>{
           let user = this.userSubject.value;
           let User = user as IUser
@@ -127,7 +132,7 @@ login(loginObject:ILoginUser):Observable<{token:string}>{
             this.UserDataservice.firstname=decodedToken.user.firstname
             this.UserDataservice.lastname=decodedToken.user.lastname
             this.UserDataservice.nickname = decodedToken.user.nickname
-            this.UserDataservice.id=decodedToken.user.id
+            this.UserDataservice.id=parseInt(decodedToken.user.id)
             
             console.log(decodedToken);
         })

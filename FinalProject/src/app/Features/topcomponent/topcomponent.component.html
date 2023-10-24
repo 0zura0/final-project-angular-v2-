@@ -5,6 +5,6 @@
 
 
 <div class="post">
-    <img class="image" src="" alt="">
+    <img class="image" [src]="subjectsService.newpath$ | async" alt="profile picture">
     <button class="addpost" (click)="openDiealogue()">Start a Post</button>
 </div>

@@ -21,16 +21,32 @@ export class UserController {
         return this.userService.findeUserByid(id);
     }
 
+
+
+
     //ფაილის აფლოუდი ბაზაში jwt ს გამოყენებით
     @UseGuards(JwtGuard)
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', saveImageFileToStorage))
-    UploadImage(@UploadedFile() file: Express.Multer.File, @Request() req): Observable<UpdateResult | { error: string }> {
-        const filename = file?.filename
-        if (!filename) return of({ error: "file must be png or jpeg or jpg" })
+    UploadImage(@UploadedFile() file: Express.Multer.File, @Request() req): Observable<{modifiedFileName:string} | { error: string }> {
+
+        if (!file.filename) return of({ error: "file must be png or jpeg or jpg" })
         const UserId = req.user.id;
-        return this.userService.updateUserUserByID(UserId, filename);
+        console.log(UserId);
+        
+        return this.userService.updateUserUserByID(UserId, file.filename).pipe(
+            switchMap(():Observable<{modifiedFileName:string} | { error: string }> =>{
+                return of({modifiedFileName:file.filename})
+            })
+        )
     }
+
+
+
+
+
+
+
 
     //ფაილის წამოღება jwt გამოყენებით
     @UseGuards(JwtGuard)
@@ -51,6 +67,16 @@ export class UserController {
     findUserImageName(@Request() req, @Res() res): Observable<{imageName:string}> {
         const userId: number = req.user.id;
         return this.userService.FindImageNameByUserID(userId).pipe(
+            switchMap((imageName: string): Observable<{imageName:string}> => {
+                return of({imageName})
+            })
+        )
+    }
+
+    @UseGuards(JwtGuard)
+    @Get('ImageById')
+    GetUserPhotoById(@Query("id") id:number): Observable<{imageName:string}> {
+        return this.userService.FindImageNameByUserID(id).pipe(
             switchMap((imageName: string): Observable<{imageName:string}> => {
                 return of({imageName})
             })

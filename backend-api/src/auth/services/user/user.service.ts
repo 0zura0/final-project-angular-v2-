@@ -14,7 +14,7 @@ export class UserService {
 
     findeUserByid(id:number):Observable<User>{
         return from(
-            this.UserRepository.findOne({select: ['id', 'firstname', 'lastname', 'nickname','email', 'password', 'phone', 'role'],
+            this.UserRepository.findOne({select: ['id', 'firstname', 'lastname', 'nickname','email', 'password', 'phone', 'role','imagePath'],
             where:{ id},relations:['feedPosts']})
         ).pipe(map((user:User):User => {
             delete user.password;
@@ -35,7 +35,6 @@ export class UserService {
     FindImageNameByUserID(id:number):Observable<string>{
         return from(this.UserRepository.findOne({where:{id}})).pipe(
             map((user:User)=>{
-                // delete user.password
                 return user.imagePath
             })
         )

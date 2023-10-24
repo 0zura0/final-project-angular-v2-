@@ -13,7 +13,7 @@ constructor(private FeedService: FeedService){}
 @Post()
 create(@Body() post :FeedPost, @Request() req):Observable<FeedPost>{ 
     console.log(post);
-    // console.log(req.body);
+    console.log(req.user);
     
     return this.FeedService.createPost(req.user, post)
 }
@@ -40,6 +40,7 @@ create(@Body() post :FeedPost, @Request() req):Observable<FeedPost>{
     return this.FeedService.getPostsWithAuthors(take,skip);
   }
 
+
 @Put(':id')
 update(
     @Body() feedpost :FeedPost,
@@ -53,8 +54,9 @@ deletePost(@Param()id :number):Observable<DeleteResult>{
     return this.FeedService.deletePost(id);
 }
 
-@Get('image/:filename')
+@Get('image/:fileName')
 findImageByFilename(@Param('fileName') fileName:string,@Res() res){
+  console.log("this is filename",fileName);
   if(!fileName || ['null','[null]'].includes(fileName)) return;
   return res.sendFile(fileName,{root:"./images"});
 }

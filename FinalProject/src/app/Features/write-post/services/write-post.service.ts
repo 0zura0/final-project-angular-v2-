@@ -5,21 +5,19 @@ import { IUseresPonse } from 'src/app/shared/Interfaces/Iauthorization/userRespo
 import { FeedPostResponse } from 'src/app/shared/Interfaces/Post/feedPostResponse';
 import { enviroment } from 'src/app/shared/env/env';
 import { User } from '../models/user.interface';
+import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WritePostService {
 
-  constructor(private http:HttpClient ) { }
+  constructor(private http:HttpClient,
+              public subjectsService:SubjectsService  ) { }
 
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
   
-  public PostThePost(body: string):Observable<IUseresPonse>{
-    return this.http.post<IUseresPonse>(`${enviroment.ApiUrl}/feed`,{"body":body},{headers:this.headers})
+  public PostThePost(body: string,Headers:HttpHeaders):Observable<IUseresPonse>{
+    return this.http.post<IUseresPonse>(`${enviroment.ApiUrl}/feed`,{"body":body},{headers:Headers})
   }
 
   getAuthorAndPoststByid(id:number):Observable<User>{

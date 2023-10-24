@@ -12,7 +12,7 @@ public lastname='';
 public nickname='';
 
 public email='';
-public id='';
+public id=0;
 public phone='';
 public role='';
 }

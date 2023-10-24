@@ -1,8 +1,14 @@
-<div *ngFor="let obj of this.manipulationService.AllLoadPosts" (scroll)="onScroll($event)">
+<div *ngFor="let obj of subjectsService.arraySubject | async" (scroll)="onScroll($event)">
 <div class="postsWrapper">
     <button *ngIf="userData.email==obj.author.email" class="trash"><i class="fa-solid fa-trash"></i></button>
     <div class="information">
-        <img class="userPhoto" src="" alt="">
+        <!-- <img class="userPhoto" *ngIf="obj.author.id==userData.id ? [src]='ImageNames(obj.author.imagePath)':[src]='subjectsService.newpath$ | async'" > -->
+        <img class="userPhoto" *ngIf="obj.author.id != userData.id"
+                [src]="ImageNames(obj.author.imagePath)"
+                alt="User Image">
+        <img class="userPhoto" *ngIf="obj.author.id === userData.id"
+                [src]="subjectsService.newpath$ | async"
+                alt="User Image">
         <div class="names">
             <span class="name">{{obj.author.firstname+" "+obj.author.lastname}}</span>
             <span class="small"><span>@</span>{{obj.author.nickname}}</span>

@@ -10,7 +10,7 @@ export interface FeedPostResponse{
             email: string,
             phone: string,
             role: Role,
-            imagePath?:string
+            imagePath:string
         },
         id: number,
         created_at: Date

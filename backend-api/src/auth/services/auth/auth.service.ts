@@ -52,7 +52,7 @@ return this.hashPassword(password).pipe(
 }
 
 ValidateUser(email:string, password:string):Observable<User>{
-    return from(this.UserRepository.findOne({select: ['id', 'firstname', 'lastname', 'nickname','email', 'password', 'phone', 'role'],
+    return from(this.UserRepository.findOne({select: ['id', 'firstname', 'lastname', 'nickname','email', 'password', 'phone', 'role','imagePath'],
     where:{ email}})).pipe(
         switchMap((user:User):any => {
 
