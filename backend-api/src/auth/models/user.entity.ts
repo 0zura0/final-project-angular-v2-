@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "./role.enum";
 import { FeedPostEntity } from "src/feed/models/post.entity";
+import { FriendRequestEntity } from "./friend_request.entity";
 
 @Entity('user')
 export class UserEntity{
@@ -33,5 +34,12 @@ export class UserEntity{
 
     @OneToMany(()=> FeedPostEntity,(FeedPostEntity)=>FeedPostEntity.author)
     feedPosts:FeedPostEntity[];
+
+    @OneToMany(()=> FriendRequestEntity,(friendRequestEntity)=>friendRequestEntity.creator)
+    SentFriendRequest:FriendRequestEntity[];
+
+    
+    @OneToMany(()=> FriendRequestEntity,(friendRequestEntity)=>friendRequestEntity.reciver)
+    RecivedFriendRequest:FriendRequestEntity[];
 
 }

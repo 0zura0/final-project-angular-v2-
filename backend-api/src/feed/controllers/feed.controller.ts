@@ -50,7 +50,8 @@ update(
 }
 
 @Delete(':id')
-deletePost(@Param()id :number):Observable<DeleteResult>{
+deletePost(@Param("id")id :number):Observable<DeleteResult>{
+  console.log("deletation");
     return this.FeedService.deletePost(id);
 }
 

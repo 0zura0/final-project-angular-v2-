@@ -1,27 +1,20 @@
 <div class="Leftwrapper">
 <h1 class="header">XChat</h1>
-<button class="leftButtons">
+<button  class="leftButtons orange">
     <i class="fa-solid fa-house"></i>
     Home
 </button>
 
-<button class="leftButtons">
+<button mat-raised-button [matBadge]='this.subjectsService.RequestarrayLenght$ | async' matBadgePosition="after" matBadgeColor="accent" 
+
+[disabled]="(this.subjectsService.RequestarrayLenght$ | async) == 0"  (click)="OpenNetworkPop($event)" class="leftButtons">
     <i class="fa-solid fa-people-line"></i>
     My Network 
-    <div style="display: none"  class="indicator">1</div>
 </button>
 
-<button class="leftButtons">
-    <i class="fa-regular fa-message"></i>
-    Messaging
-    <div style="display: none" class="indicator">1</div>
-</button>
-
-
-<button class="leftButtons">
-    <i class="fa-solid fa-bell"></i>
-    Notification
-    <div style="display: none" class="indicator">1</div>
+<button (click)="Seefollowers()" class="leftButtons">
+    <i class="fa-solid fa-user-group"></i>
+    Followers
 </button>
 
 <button (click)="openPdf()" class="leftButtons">

@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import { ComponentRef, Injectable } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FollowersComponent } from 'src/app/Features/followers/followers.component';
+import { NetWorkRequestComponent } from 'src/app/Features/net-work-request/net-work-request.component';
 
 @Injectable({
   providedIn: 'root'
@@ -19,4 +22,9 @@ export class ManipulationService {
 
   localPostIdarray:number[]=[]
 
+  dialogRef!:ComponentRef<NetWorkRequestComponent>;
+
+
+
+  followersDialog!:MatDialogRef<FollowersComponent, any>;
 }

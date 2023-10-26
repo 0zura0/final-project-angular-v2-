@@ -1,0 +1,48 @@
+.container{
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+.closeDiv{
+    display: flex;
+    justify-content: flex-end;
+    :hover{
+        cursor: pointer;
+    }
+}
+
+.RequestWrapper{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin: 5px;
+    .buttons{
+        display: flex;
+        justify-content:space-around;
+        gap: 20px;
+        .but{
+            width: 70px;
+            height: 25px;
+            color: deepskyblue;
+            border: 1px solid deepskyblue;
+            background-color: white;
+            border-radius: 5px;
+        }
+        #Decline{
+            color: red;
+            border: 1px solid red;
+        }
+        #Decline:hover{
+            background-color: red;
+            color:white
+        }
+        .but:hover{
+            background-color:deepskyblue;
+            color: white;
+            cursor: pointer;
+        }
+    }
+}
+}

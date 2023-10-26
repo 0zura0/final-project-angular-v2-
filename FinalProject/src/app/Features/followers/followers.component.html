@@ -1,0 +1,24 @@
+<div class="wrapper"> 
+<table>
+    <tr>
+    <th>
+        Name
+    </th>
+    <th>
+        Surname
+    </th>
+    <th>
+        Nicname
+    </th>
+    <th>
+        Action
+    </th>
+</tr>
+<tr *ngFor="let follower of (this.subjectsService.FollowersArray$ | async)">
+<td>{{follower.creator.firstname}}</td>
+<td>{{follower.creator.lastname}}</td>
+<td>{{follower.creator.nickname}}</td>
+<td><button (click)="deleteFollower(follower.id)">delete</button></td>
+</tr>
+</table>
+</div>

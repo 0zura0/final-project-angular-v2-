@@ -1,5 +1,5 @@
 <div class="profile">
-    <button class="closeProfile" mat-buttin mat-dialog-close>x</button>
+    <button class="closeProfile" mat-dialog-close>x</button>
     <div class="background"></div>
     <div>
     <input #fileUpload (change)="onFileSelect($event)" type="file" style="display: none;">
@@ -10,7 +10,6 @@
         <span>@{{userDataService.nickname}}</span>
     </div>
     <div class="profilebuttons">
-    <button>connect</button>
-    <button>message</button>
+    <button><i class="fa-solid fa-lock"></i>  connect</button>
     </div>
 </div>

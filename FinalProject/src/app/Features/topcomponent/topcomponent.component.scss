@@ -9,16 +9,35 @@
         display: inline-block;
         border-radius: 10%;
     }
-    .search{
-        width: 80%;
-        height: 40px;
-        border-radius: 20px;
-        border: 1px solid gray;
-        margin-top: 5px;
-        font-size: 20px;
-        padding-left: 20px;
-        margin-bottom: 15px;
+    .align{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .search{
+            width: 80%;
+            height: 40px;
+            border-radius: 20px;
+            border: 1px solid gray;
+            margin-top: 5px;
+            font-size: 20px;
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        .searchbutton{
+            width: 60px;
+            height: 40px;
+            border-radius: 5px;
+            background-color: orange;
+            margin-top: -5px;
+            border: none;
+            display: inline-block;
+            margin-bottom: 15px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
     }
+
+
     .post{
         display: flex;
         justify-content: center;

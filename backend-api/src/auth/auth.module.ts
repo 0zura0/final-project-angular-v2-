@@ -6,8 +6,9 @@ import { UserEntity } from './models/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtGuard } from './guards/jwt/jwt.guard';
 import { JwtStrategy } from './guards/jwt.strategy';
-import { UserService } from './services/user/user.service';
+import { UserService } from './services/user/UserService';
 import { UserController } from './controllers/user/user.controller';
+import { FriendRequestEntity } from './models/friend_request.entity';
 
 
 @Module({
@@ -16,9 +17,10 @@ import { UserController } from './controllers/user/user.controller';
       secret:process.env.JWT_SECRET_KEY,
       signOptions:{expiresIn:"3600s"}
     })
-    // secret:process.env.jwtSecret,
   }),
-  TypeOrmModule.forFeature([UserEntity])],
+  TypeOrmModule.forFeature([UserEntity,FriendRequestEntity])
+],
+
   controllers: [AuthController, UserController],
   providers: [AuthService,JwtGuard,JwtStrategy, UserService],
   exports:[UserService]

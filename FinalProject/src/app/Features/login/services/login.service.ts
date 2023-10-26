@@ -103,7 +103,6 @@ export class LoginService {
 
 
       private headers = new HttpHeaders({
-        // 'Content-Type': 'undefined',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       });
 
@@ -144,6 +143,13 @@ this.userSubject.next(null);
 localStorage.removeItem('token');
 this.router.navigate(['/Login']);
 
+}
+
+DetelePostById(id:number){
+
+  console.log(`${enviroment.ApiUrl}/feed/${id}`);
+  
+  return this.http.delete(`${enviroment.ApiUrl}/feed/${id}`)
 }
 
 

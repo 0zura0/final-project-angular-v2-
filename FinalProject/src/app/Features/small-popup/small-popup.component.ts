@@ -8,6 +8,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { MapType } from '@angular/compiler';
 import { IUser } from 'src/app/shared/Interfaces/Iauthorization/user.model';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 type ValifFileExtentions  = 'png' | 'jpg' | 'jpeg';
 type ValidMimeType = 'image/png' | 'image/jpeg' | 'image/jpg';
@@ -15,7 +16,7 @@ type ValidMimeType = 'image/png' | 'image/jpeg' | 'image/jpg';
 @Component({
   selector: 'app-small-popup',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,MatDialogModule],
   templateUrl: './small-popup.component.html',
   styleUrls: ['./small-popup.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush

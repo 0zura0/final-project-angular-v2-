@@ -1,6 +1,6 @@
 <div *ngFor="let obj of subjectsService.arraySubject | async" (scroll)="onScroll($event)">
 <div class="postsWrapper">
-    <button *ngIf="userData.email==obj.author.email" class="trash"><i class="fa-solid fa-trash"></i></button>
+    <button (click)="deletePostById(obj.id)" *ngIf="this.userData.id===obj.author.id" class="trash"><i class="fa-solid fa-trash"></i></button>
     <div class="information">
         <!-- <img class="userPhoto" *ngIf="obj.author.id==userData.id ? [src]='ImageNames(obj.author.imagePath)':[src]='subjectsService.newpath$ | async'" > -->
         <img class="userPhoto" *ngIf="obj.author.id != userData.id"

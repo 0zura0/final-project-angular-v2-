@@ -134,6 +134,20 @@ private isLoading:boolean = false;
       return this.LoginService.getFullImagePath(name)
     }
   }
+
+  deletePostById(id:number){
+    const handledRequest =this.subjectsService.arraySubject.value.find(
+      (request)=>{
+        return request.id === id}
+    );
+
+    const unhandledRequest =this.subjectsService.arraySubject.value.filter(
+      (request)=>{
+        return request.id !== handledRequest?.id}
+    ) 
+    this.subjectsService.arraySubject.next(unhandledRequest)
+    return this.LoginService.DetelePostById(id).subscribe()
+  }
   }
 
 

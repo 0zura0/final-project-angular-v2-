@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="closeDiv">
+        <button mat-button (click)="closeDialog()" style="width: 20px; height: 20px;">x</button>
+    </div>
+    <div *ngFor="let request of (this.subjectsService.localRequestArray$ | async)">
+<div class="RequestWrapper">
+    <span class="fullname">{{request.creator.firstname +" "+request.creator.lastname}}</span>
+    <div class="buttons">
+        <button (click)="ResponseToFriendRequest(request.id,'accepted')" id="Accept" class="but">Accept</button>
+        <button (click)="deleteDeclinedRequest(request.id,'declined')" id="Decline" class="but">Decline</button>
+    </div>
+</div>
+</div>
+</div>

@@ -1,0 +1,28 @@
+<div class="profile">
+    <button class="closeProfile" mat-buttin mat-dialog-close>x</button>
+    <div class="background"></div>
+    <div>
+        <img  class="profileimage" [src]="(searchserviceService.SearchUserSubject$ | async)?.imagePath" >
+    </div>
+    <div class="profilenames">
+        <span>{{ (searchserviceService.SearchUserSubject$ | async)?.firstname + " " + (searchserviceService.SearchUserSubject$ | async)?.lastname }}</span>
+        <span>@{{ (searchserviceService.SearchUserSubject$ | async)?.nickname }}</span>
+    </div>
+
+    <ng-container *ngIf="friendRequestStatus$ | async as status">
+        <div *ngIf="['not-sent', 'pending', 'declined','waiting-the-User-response'].includes(status)" class="profilebuttons">
+          <button (click)="addUser()" [disabled]="['pending', 'waiting-the-User-response'].includes(status)"
+
+
+                  [ngClass]="{'grayish-button': ['pending', 'waiting-the-User-response'].includes(status)}"
+
+
+                  class="connect">{{status ==='waiting-the-User-response' ? 'Accept Request' : "Connect"}}</button>
+        </div>
+      </ng-container>
+      
+
+</div>
+
+
+<!-- class="connect">{{status ==='waiting-the-User-response' ? 'Accept Request' : "Connect"}}</button> -->

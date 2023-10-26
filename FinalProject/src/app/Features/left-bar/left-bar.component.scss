@@ -20,25 +20,15 @@
         padding-left: 15px;
         position: relative;
         border: none;
-        border-radius: 20px;
+        border-radius: 10px;
         background-color: $button;
         cursor: pointer;
         min-width: 170px;
-        .indicator{
-            position: absolute;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            height: 20px;
-            width: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            right: 30px;
-        }
-
     }
     .leftButtons:hover{
         background-color: rgb(241, 206, 142);
     }
+    .orange{
+        background-color: rgb(241, 206, 142);
+        }
 }

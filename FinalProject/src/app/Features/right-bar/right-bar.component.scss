@@ -25,16 +25,14 @@
     flex-direction: column;
     align-self:flex-start;
     margin-left: 20px;
-    white-space: nowrap;     /* Prevent text from wrapping */
-    overflow: hidden;       /* Hide overflowing content */
-    text-overflow: ellipsis; /* Display ellipsis for overflow */
-    width: 90%;
+    width: 85%;
     gap: 15px;
     margin-top: 15px;
 }
-
+.header{
+    font-size: 22px;
 }
-
+}
 .center {
 margin: auto;
   }
