@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConnectToOthersService } from '../request-profile/RequestProfile/connect-to-others.service';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
@@ -14,7 +14,8 @@ import { UserDataService } from 'src/app/shared/services/manipulateData/user-dat
   standalone: true,
   imports: [CommonModule],
   templateUrl: './followers.component.html',
-  styleUrls: ['./followers.component.scss']
+  styleUrls: ['./followers.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FollowersComponent implements OnInit {
 
