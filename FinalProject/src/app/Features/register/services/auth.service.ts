@@ -10,10 +10,6 @@ import { enviroment } from 'src/app/shared/env/env';
 })
 export class AuthService {
 
-  // private httpOtions:{header:HttpHeaders} ={
-  //   header: new HttpHeaders({'Content-Type': 'application/json'}),
-  // }
-
   constructor(private http:HttpClient) { }
 
   register(newUser:INewUser): Observable<IUser> {

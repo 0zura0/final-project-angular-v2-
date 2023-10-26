@@ -4,7 +4,6 @@ import { ManipulationService } from '../services/manipulateData/manipulation.ser
 
 export const doNotBackGuard: CanDeactivateFn<boolean> = (route, state) => {
   const manipulatesaerviuce = inject(ManipulationService);
-  console.log("doNotBackGuard is working");
   if (manipulatesaerviuce.logedIn) {
     return false;
   }  

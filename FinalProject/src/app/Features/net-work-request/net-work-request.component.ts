@@ -4,9 +4,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { ConnectToOthersService } from '../request-profile/RequestProfile/connect-to-others.service';
 import { FriendRequest, FriendRequestWithreciverAndCreators } from 'src/app/shared/Interfaces/FriendRequestedStatus/status.model';
-import { HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Subscription, take, tap } from 'rxjs';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Subscription, take, tap, throwError } from 'rxjs';
 import { IUser } from 'src/app/shared/Interfaces/Iauthorization/user.model';
+import { catchError} from 'rxjs/operators';
 import { LoginService } from '../login/services/login.service';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
 
@@ -55,19 +56,24 @@ export class NetWorkRequestComponent implements OnInit {
       (request:FriendRequestWithreciverAndCreators)=>{
         return request.id !== handledRequest?.id}
     ) 
-    console.log(unhandledRequest);
-    console.log(handledRequest);
     
     //vnaxot es rogori iqneba
     this.subjectsService.localRequestArray$.next(unhandledRequest)
 
     if(this.subjectsService.localRequestArray$.value.length===0){
-      console.log("arraysize",this.subjectsService.localRequestArray$.value.length);
       this.manipulationService.dialogRef.destroy();
     }
     this.subjectsService.RequestarrayLenght$.next(unhandledRequest.length)
 
-    return this.connectToOthersService.ResponseToFriendRequest(id,this.headers,statusResponse).pipe(take(1)).subscribe()
+    return this.connectToOthersService.ResponseToFriendRequest(id,this.headers,statusResponse).pipe(take(1)).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe()
   };
 
 
@@ -83,19 +89,24 @@ export class NetWorkRequestComponent implements OnInit {
       (request:FriendRequestWithreciverAndCreators)=>{
         return request.id !== handledRequest?.id}
     ) 
-    console.log(unhandledRequest);
-    console.log(handledRequest);
     
     //vnaxot es rogori iqneba
     this.subjectsService.localRequestArray$.next(unhandledRequest)
 
     if(this.subjectsService.localRequestArray$.value.length===0){
-      console.log("arraysize",this.subjectsService.localRequestArray$.value.length);
       this.manipulationService.dialogRef.destroy();
     }
     this.subjectsService.RequestarrayLenght$.next(unhandledRequest.length)
 
-    return this.connectToOthersService.deleteStatusById(id).pipe(take(1)).subscribe()
+    return this.connectToOthersService.deleteStatusById(id).pipe(take(1)).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe()
   };
 
 

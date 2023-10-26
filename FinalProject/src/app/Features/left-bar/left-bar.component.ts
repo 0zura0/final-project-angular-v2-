@@ -10,9 +10,10 @@ import { NetWorkRequestComponent } from '../net-work-request/net-work-request.co
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { FriendRequest, FriendRequestWithreciverAndCreators } from 'src/app/shared/Interfaces/FriendRequestedStatus/status.model';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, throwError } from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import { ConnectToOthersService } from '../request-profile/RequestProfile/connect-to-others.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import {MatBadgeModule} from '@angular/material/badge';
 import { FollowersComponent } from '../followers/followers.component';
 
@@ -45,11 +46,17 @@ private frienrequestSubscription!: Subscription;
   });
 
   ngOnInit(): void {
-    this.frienrequestSubscription = this.connectToOthersService.getFriendRequests(this.headers).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
+    this.frienrequestSubscription = this.connectToOthersService.getFriendRequests(this.headers).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
       
       this.connectToOthersService.friendRequest=friendRequests.filter((friendRequest:FriendRequestWithreciverAndCreators)=>{
-        console.log("cretor");
-        console.log(friendRequest.creator);
         return friendRequest.status ==="pending"
       });
 
@@ -66,16 +73,22 @@ private frienrequestSubscription!: Subscription;
 
   updateNetworkinfo(): void {
     setInterval(()=>{
-      this.frienrequestSubscription = this.connectToOthersService.getFriendRequests(this.headers).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
+      this.frienrequestSubscription = this.connectToOthersService.getFriendRequests(this.headers).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 500) {
+            return throwError('Internal server error. Please try again later.');
+          } else {
+              return throwError('Something went wrong.');
+          }
+        })
+      ).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
         this.connectToOthersService.friendRequest=friendRequests.filter((friendRequest:FriendRequestWithreciverAndCreators)=>{
           return friendRequest.status ==="pending"
         });
   
         this.subjectsService.RequestarrayLenght$.next(this.connectToOthersService.friendRequest.length)
         this.subjectsService.localRequestArray$.next(this.connectToOthersService.friendRequest)
-        console.log();
       })
-      console.log("updated"); 
     },10000)
   }
 
@@ -93,7 +106,7 @@ private frienrequestSubscription!: Subscription;
     this.manipulatesaerviuce.skipPosts=0
 
     this.userDataService.email=''
-    this.userDataService.firstname=''
+    // this.userDataService.firstname=''
     this.userDataService.lastname=''
     this.userDataService.id=0;
     this.userDataService.nickname=''

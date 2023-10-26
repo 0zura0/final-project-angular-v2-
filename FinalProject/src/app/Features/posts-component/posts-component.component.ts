@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GetpostsService } from 'src/app/shared/services/getposts/getposts.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { IPost } from 'src/app/shared/Interfaces/Post/IPots';
 import { LoginService } from '../login/services/login.service';
-import { BehaviorSubject, Observable, map, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap, throwError } from 'rxjs';
 import { UserDataService } from 'src/app/shared/services/manipulateData/user-data.service';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
 import { FeedPostResponse } from 'src/app/shared/Interfaces/Post/feedPostResponse';
+import {catchError} from 'rxjs/operators';
 
 
 @Component({
@@ -42,7 +43,6 @@ private isLoading:boolean = false;
       }
 
       this.manipulationService.skipPosts+=this.takeNum;
-    //   this.Ref.detectChanges();           //i want to change this
     this.subjectsService.arraySubject.next(this.subjectsService.LocalArray)
       this.manipulationService.isLoading = false;
     }
@@ -60,20 +60,16 @@ private isLoading:boolean = false;
     this.manipulationService.isLoading = true;
     this.queryParam = `take=${this.numberOfPosts}&skip=${this.manipulationService.skipPosts}`;
 
-    console.log("queryParamueryparameter is: ",this.queryParam);
-    
-    // if(!this.disabled){
 
-      // if(this.manipulationService.skipPosts === this.manipulationService.DbItems){
-      //   event.target.disabled = true;
-      //   this.disabled=true      
-      // }
-      // console.log("event target disabeled: ");
-      
-      // console.log(event.target.disabled);
-      
-
-    this.PostService.GetSelectedPosts(this.queryParam).subscribe((posts:[FeedPostResponse[],number])=>{
+    this.PostService.GetSelectedPosts(this.queryParam).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe((posts:[FeedPostResponse[],number])=>{
       const [ActualPosts,number] = posts
       if(ActualPosts.length == 0){
         this.isLoading=false;
@@ -90,14 +86,12 @@ private isLoading:boolean = false;
       this.manipulationService.skipPosts+=1;
       this.manipulationService.isLoading = false;
       this.subjectsService.arraySubject.next(this.subjectsService.LocalArray)
-      console.log('done');
       
     })
   }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event) {
-    console.log("hi from onscroll");
     const scrollY = window.scrollY || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
@@ -128,7 +122,6 @@ private isLoading:boolean = false;
 
   public ImageNames(name: string):string{
     if(name==null){
-      console.log(this.LoginService.getDefaultFullImagePath());
       return this.LoginService.getDefaultFullImagePath()
     }else{
       return this.LoginService.getFullImagePath(name)
@@ -146,7 +139,15 @@ private isLoading:boolean = false;
         return request.id !== handledRequest?.id}
     ) 
     this.subjectsService.arraySubject.next(unhandledRequest)
-    return this.LoginService.DetelePostById(id).subscribe()
+    return this.LoginService.DetelePostById(id).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe()
   }
   }
 

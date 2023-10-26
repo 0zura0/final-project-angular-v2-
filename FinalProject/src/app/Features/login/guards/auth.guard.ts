@@ -12,12 +12,10 @@ export const authGuard: CanActivateFn = (route, state) => {
   return Loginservice.isUserLogedIn.pipe(
     switchMap((isUserLogedIn:boolean):Observable<boolean> =>{
       if(isUserLogedIn){
-        console.log("hi from gurad loged in");
         
         return of(isUserLogedIn)
       }else{
         router.navigate(['/Login'])
-        console.log("hi from gurad not loged in");
         return of(false)
       }
     })

@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { INewUser } from 'src/app/shared/Interfaces/Iauthorization/newUser.model';
 import { AuthService } from './services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -22,18 +25,6 @@ export class RegisterComponent {
               public manipulate : ManipulationService,
               private authService:AuthService){}
   ngOnInit(): void {
-    //თუ დრო დამრჩა აფდეითს მერე გავაკეთებ
-    // if(this.container.action=='Update'){
-    //   this.action=this.container.action
-    //   this.form.get('email')?.setValue(this.container.tempobject?.Email as string)
-    //   this.form.get('password')?.setValue(this.container.tempobject?.password as string)
-    //   this.form.get('confirmPassword')?.setValue(this.container.tempobject?.confirmPassword as string)
-    //   this.form.get('nickname')?.setValue(this.container.tempobject?.nickname as string)
-    //   this.form.get('phone')?.setValue(this.container.tempobject?.phone as string)
-    //   this.form.get('webkitURL')?.setValue(this.container.tempobject?.website as string)
-    //   console.log(this.container.tempobject?.Email);
-    // }
-    // console.log(this.container.action=='Update');
   }
 
   public form = this.formBuilder.group({
@@ -50,7 +41,6 @@ export class RegisterComponent {
 
  
   public onSubmit(){
-    console.log(this.form.value);
     
     this.isSubmited=true;
     if(this.form.valid){
@@ -65,29 +55,18 @@ export class RegisterComponent {
           nickname: this.form.get('nickname')?.value as string,
           phone: this.form.get('phone')?.value as string,
         }
-        this.authService.register(obj).subscribe(user => {console.log(user);})
-        console.log(obj);
+        this.authService.register(obj).pipe(
+          catchError((error: HttpErrorResponse) => {
+            if (error.status === 500) {
+              return throwError('Internal server error. Please try again later.');
+            } else {
+                return throwError('Something went wrong.');
+            }
+          })
+        ).subscribe()
         
   }
 
-    // if(this.form.valid){
-    //   // let obj:IUser = {
-    //   //   Email: this.form.get('email')?.value,
-    //   //   password: this.form.get('password')?.value,
-    //   //   confirmPasswor.value
-    //   //   nickname:this.form.get('nickname')?.value,
-    //   //   phone: this.form.get('phone')?.value,
-    //   //   website: this.form.get('webkitURL')?.value,
-    //   // }
-    //   this.container.myContainer.set(this.form.get('email')?.value,obj)
-    //   this.router.navigate(["/Login"])
-    //   if(this.container.action==='Update'){
-    //     this.router.navigate(['/Users'])
-    //   }else{
-    //     this.router.navigate(["/Login"])
-    //   }
-    //   console.log(this.container.myContainer.get(this.form.get('website')?.value));
-    // }
   }
 
   public hasError(controlName:string, errorName:string){

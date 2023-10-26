@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { SmallPopupComponent } from '../small-popup/small-popup.component';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Subscription, throwError } from 'rxjs';
 import { RightBarService } from './services/right-bar.service';
-
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-right-bar',
@@ -23,7 +23,15 @@ export class RightBarComponent implements OnInit {
   public chuckNorrisFact$ = new BehaviorSubject<string>('')
   
   ngOnInit(): void {
-  this.rightBarService.getFacts().subscribe((value)=>{
+  this.rightBarService.getFacts().pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 500) {
+        return throwError('Internal server error. Please try again later.');
+      } else {
+          return throwError('Something went wrong.');
+      }
+    })
+  ).subscribe((value)=>{
     this.chuckNorrisFact$.next(value.value as string);
     
   }

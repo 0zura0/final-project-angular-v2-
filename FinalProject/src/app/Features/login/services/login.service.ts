@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
-import { Observable, tap,BehaviorSubject, switchMap, of, map } from 'rxjs';
+import { Observable, tap,BehaviorSubject, switchMap, of, map, first } from 'rxjs';
 import { ILoginUser } from 'src/app/shared/Interfaces/Iauthorization/loginUser.model';
 import { IUser } from 'src/app/shared/Interfaces/Iauthorization/user.model';
 import { IUseresPonse } from 'src/app/shared/Interfaces/Iauthorization/userResponse.model';
@@ -51,7 +51,7 @@ export class LoginService {
       return this.userSubject.asObservable().pipe(
         switchMap((user:IUser | null):Observable<string>=>{
           let User = user as IUser;
-          const fullname=User.firstname+" "+User.lastname
+          const fullname=User.firstname +" "+User.lastname
           return of(fullname);
         })
       )
@@ -69,7 +69,6 @@ export class LoginService {
       return this.userSubject.asObservable().pipe(
         switchMap((User:IUser | null):Observable<string> =>{
           const user = User as IUser;
-          console.log(User);
           const DoesAuthorHaveImage = !!user?.imagePath; //ეს კაი რამე ვიპოვე თუ არსებობს imagepath მაშინ იქნება true თუ არადა false
           let fullImagePath = this.getDefaultFullImagePath()
           if(DoesAuthorHaveImage){
@@ -129,26 +128,26 @@ login(loginObject:ILoginUser):Observable<{token:string}>{
             this.userSubject.next(decodedToken.user);
 
             this.UserDataservice.firstname=decodedToken.user.firstname
+
+            console.log(decodedToken.user.firstname);
+
+
             this.UserDataservice.lastname=decodedToken.user.lastname
             this.UserDataservice.nickname = decodedToken.user.nickname
             this.UserDataservice.id=parseInt(decodedToken.user.id)
             
-            console.log(decodedToken);
         })
       )
   }
 
 logout():void{
-this.userSubject.next(null);
+// this.userSubject.next(null);
 localStorage.removeItem('token');
 this.router.navigate(['/Login']);
 
 }
 
-DetelePostById(id:number){
-
-  console.log(`${enviroment.ApiUrl}/feed/${id}`);
-  
+DetelePostById(id:number){  
   return this.http.delete(`${enviroment.ApiUrl}/feed/${id}`)
 }
 

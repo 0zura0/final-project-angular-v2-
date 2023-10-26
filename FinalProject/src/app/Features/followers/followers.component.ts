@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConnectToOthersService } from '../request-profile/RequestProfile/connect-to-others.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { FriendRequestWithreciverAndCreators } from 'src/app/shared/Interfaces/FriendRequestedStatus/status.model';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
-import { Subscription, take } from 'rxjs';
+import { Subscription, take, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { UserDataService } from 'src/app/shared/services/manipulateData/user-data.service';
 
@@ -27,8 +28,15 @@ public headers = new HttpHeaders({
 });
 
   ngOnInit(): void {
-    this.connectToOthersService.getFriendRequests(this.headers).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
-      console.log(friendRequests); 
+    this.connectToOthersService.getFriendRequests(this.headers).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
       this.subjectsService.followersArray=friendRequests.filter((friendRequest:FriendRequestWithreciverAndCreators)=>{
         if(friendRequest.status==="accepted" && friendRequest.creator.firstname===this.userDataService.firstname && friendRequest.creator.lastname == this.userDataService.lastname){
 
@@ -60,7 +68,15 @@ public headers = new HttpHeaders({
     ) 
     
     this.subjectsService.FollowersArray$.next(unhandledRequest)  
-    return this.connectToOthersService.deleteStatusById(id).pipe(take(1)).subscribe()
+    return this.connectToOthersService.deleteStatusById(id).pipe(take(1)).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe()
   };
 
 }

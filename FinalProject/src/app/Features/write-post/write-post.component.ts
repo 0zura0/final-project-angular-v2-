@@ -3,16 +3,16 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserDataService } from 'src/app/shared/services/manipulateData/user-data.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { FeedPostResponse } from 'src/app/shared/Interfaces/Post/feedPostResponse';
 import { WritePostService } from './services/write-post.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { GetpostsService } from 'src/app/shared/services/getposts/getposts.service';
 import { IPost } from 'src/app/shared/Interfaces/Post/IPots';
 import { User } from './models/user.interface';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
-
+import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-write-post',
   standalone: true,
@@ -46,13 +46,18 @@ export class WritePostComponent {
     this.PostDataFromTextarea()
   
     setTimeout(() => {
-    this.getAuthorAndPoststByid(this.userDataService.id).subscribe((author)=>{
+    this.getAuthorAndPoststByid(this.userDataService.id).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe((author)=>{
       const feeds = author.feedPosts as IPost[];
-      console.log(author);
       const sortedFeeds = feeds.sort((a,b)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime())
-      console.log(sortedFeeds);
       const feed = sortedFeeds.at(0) as IPost
-      console.log(feed);
       
       
       let mynewPost:FeedPostResponse ={
@@ -86,7 +91,15 @@ export class WritePostComponent {
   });
 
   PostDataFromTextarea(){
-    return this.writePostService.PostThePost(this.form.get('textarea')?.value as string,this.headers).subscribe()
+    return this.writePostService.PostThePost(this.form.get('textarea')?.value as string,this.headers).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
+    ).subscribe()
   }
 
   getAuthorAndPoststByid(id:number){

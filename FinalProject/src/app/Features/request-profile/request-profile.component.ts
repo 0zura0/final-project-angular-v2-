@@ -4,11 +4,11 @@ import { SearchserviceService } from '../topcomponent/services/searchservice.ser
 import { MatDialogModule } from '@angular/material/dialog';
 import { ObserversModule } from '@angular/cdk/observers';
 import { FriendRequest, friendRequestStatus } from 'src/app/shared/Interfaces/FriendRequestedStatus/status.model';
-import { BehaviorSubject, Observable, Subscription, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, switchMap, take, tap, throwError } from 'rxjs';
 import { ConnectToOthersService } from './RequestProfile/connect-to-others.service';
 import { IUser } from 'src/app/shared/Interfaces/Iauthorization/user.model';
-import { HttpHeaders } from '@angular/common/http';
-
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-request-profile',
   standalone: true,
@@ -18,33 +18,32 @@ import { HttpHeaders } from '@angular/common/http';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestProfileComponent implements OnInit , OnDestroy {
-//es gadasaketebeli meqneba albat
-// User?:IUser
-
 
 public friendRequestStatus$ = new BehaviorSubject<string | null>('')
 
 friendRequestStatusSubscription$?:Subscription
-// userSubscription$?:Subscription
-//--------------------------------------------------------
 
 constructor(public searchserviceService:SearchserviceService,
             private connectToOthersService:ConnectToOthersService
             ){}
 
   ngOnDestroy(): void {
-    // this.userSubscription$?.unsubscribe();
     this.friendRequestStatusSubscription$?.unsubscribe();
   }
   ngOnInit(): void {
     this.friendRequestStatusSubscription$ = this.GetFriendRequestStatus().pipe(
       tap((friendRequestStatus:friendRequestStatus) =>{
-        // this.friendRequestStatus = friendRequestStatus.status as string;
         this.friendRequestStatus$.next(friendRequestStatus.status as string);
-        console.log("status from ngoninit : ");
-        console.log(this.friendRequestStatus$.value);
       })
 
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) {
+          return throwError('Internal server error. Please try again later.');
+        } else {
+            return throwError('Something went wrong.');
+        }
+      })
     ).subscribe()
   }
 
@@ -53,8 +52,6 @@ constructor(public searchserviceService:SearchserviceService,
   });
 
 GetFriendRequestStatus():Observable<friendRequestStatus>{
-  console.log("id from searchUserSubject$: ");
-  console.log(this.searchserviceService.SearchUserSubject$.value?.id as string);
   let id =parseInt(this.searchserviceService.SearchUserSubject$.value?.id as string)
   return this.connectToOthersService.getFriendRequestStatus(id,this.headers).pipe()
 }
@@ -62,7 +59,15 @@ GetFriendRequestStatus():Observable<friendRequestStatus>{
 addUser():Subscription{
 this.friendRequestStatus$.next('pending')
 let id =parseInt(this.searchserviceService.SearchUserSubject$.value?.id as string)
-return this.connectToOthersService.addConectionUser(id,this.headers).pipe(take(1)).subscribe()
+return this.connectToOthersService.addConectionUser(id,this.headers).pipe(take(1)).pipe(
+  catchError((error: HttpErrorResponse) => {
+    if (error.status === 500) {
+      return throwError('Internal server error. Please try again later.');
+    } else {
+        return throwError('Something went wrong.');
+    }
+  })
+).subscribe()
 }
 
 

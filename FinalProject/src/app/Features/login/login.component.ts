@@ -4,6 +4,9 @@ import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { LoginService } from './services/login.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -28,12 +31,9 @@ export class LoginComponent {
 
 
 // ეს მერე წასაშლელია----------------------------
-    this.form.get('Email')?.setValue("zuraMZ@gmail.com");
-    this.form.get('password')?.setValue("12345678");
+    // this.form.get('Email')?.setValue("zuraMZ@gmail.com");
+    // this.form.get('password')?.setValue("12345678");
 
-
-    // this.container.myContainer.set('1',this.obj)
-    // console.log(this.container.myContainer);
   }
 
   public form =this.formbuilder.group({
@@ -49,25 +49,22 @@ export class LoginComponent {
           email: this.form.get('Email')?.value as string,
           password:this.form.get('password')?.value as string,
         }
-        this.loginService.login(loginObj).subscribe((result)=>{
-          console.log("this is result: "+result);
+        this.loginService.login(loginObj).pipe(
+          catchError((error: HttpErrorResponse) => {
+            if (error.status === 500) {
+              // Handle 500 Internal Server Error
+              return throwError('Internal server error. Please try again later.');
+            } else {
+                return throwError('Something went wrong.');
+            }
+          })
+        ).subscribe((result)=>{
           this.router.navigate(['/LogedIn']);
           this.manipulatesaerviuce.leftbarDisabled=true;
           this.manipulatesaerviuce.topBarsDisabled=true
           this.manipulatesaerviuce.rightBarsDisabled=true
           this.manipulatesaerviuce.logedIn=true;
         })
-
-
-
-    // if( this.container.myContainer.get(this.form.get('Email')?.value)?.password === this.form.get('password')?.value){
-    // this.router.navigate(['/Users']);
-    // this.container.userGmails=this.form.get('Email')?.value as string;
-    // this.container.islogin=false;
-    // this.container.isCurrency=true;
-    // this.container.isLogOut=true;
-    // this.container.isUser=true;
-    // }
   }
 
 }

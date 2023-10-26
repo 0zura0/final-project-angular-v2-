@@ -16,14 +16,4 @@ export class GetpostsService {
     return this.http.get<[FeedPostResponse[],number]>(`${enviroment.ApiUrl}/feed?${params}`)
   }
 
-  // public PostThePost(body: string){
-  //   return this.http.post<FeedPostResponse>(`${enviroment.ApiUrl}/feed`,body)
-  // }
-  // public GetImagesById(id:number):Observable<string>{
-  //   return this.http.get<{imageName:string}>(`${enviroment.ApiUrl}/user/ImageById?id=${id}`).pipe(
-  //     switchMap((response):string=>{
-  //       return response.imageName
-  //     })
-  //   )
-  // }
 }

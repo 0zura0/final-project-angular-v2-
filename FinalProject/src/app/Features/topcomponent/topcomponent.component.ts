@@ -59,7 +59,6 @@ export class TopcomponentComponent implements OnInit {
             result.imagePath =this.loginService.getFullImagePath(result.imagePath)
           }
           this.searchserviceService.SearchUserSubject$.next(result as IUser)
-          // console.log(this.searchserviceService.SearchUserSubject$.value?.imagePath);
         }
         this.form.get('search')?.setValue('')
         this.OpenSearchWindow()
