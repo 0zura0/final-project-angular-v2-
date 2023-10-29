@@ -29,36 +29,29 @@ export class LoginComponent {
   ngOnInit(): void {
     localStorage.removeItem('token');
 
-
-// ეს მერე წასაშლელია----------------------------
-    // this.form.get('Email')?.setValue("zuraMZ@gmail.com");
-    // this.form.get('password')?.setValue("12345678");
-
   }
 
   public form =this.formbuilder.group({
     Email:['', Validators.required],
     password:['', Validators.required]
   });
-  ToRegister(){
+
+  ToRegister():void{
     this.router.navigate(['Register']);
     this.manipulatesaerviuce.wholeTopDiv=false
   }
-  public onSubmit(){
+
+  public onSubmit():void{
         let loginObj ={
           email: this.form.get('Email')?.value as string,
           password:this.form.get('password')?.value as string,
         }
         this.loginService.login(loginObj).pipe(
           catchError((error: HttpErrorResponse) => {
-            if (error.status === 500) {
-              // Handle 500 Internal Server Error
-              return throwError('Internal server error. Please try again later.');
-            } else {
+            alert("Email or password is not valid Please Try again")
                 return throwError('Something went wrong.');
-            }
           })
-        ).subscribe((result)=>{
+        ).subscribe(()=>{
           this.router.navigate(['/LogedIn']);
           this.manipulatesaerviuce.leftbarDisabled=true;
           this.manipulatesaerviuce.topBarsDisabled=true

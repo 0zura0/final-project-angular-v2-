@@ -9,8 +9,9 @@ import { FriendRequestWithreciverAndCreators } from '../../Interfaces/FriendRequ
 export class SubjectsService {
 
   constructor() { }
-newpath$ = new BehaviorSubject<string>('');
 
+
+newpath$ = new BehaviorSubject<string>('');
 
 //ესენი პოსტებისთვის
 arraySubject = new BehaviorSubject<FeedPostResponse[]>([]); 

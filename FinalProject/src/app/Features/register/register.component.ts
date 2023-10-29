@@ -44,8 +44,6 @@ export class RegisterComponent {
     
     this.isSubmited=true;
     if(this.form.valid){
-        this.router.navigate(["/Login"])
-        this.manipulate.wholeTopDiv=true //აქ ჩნდება
 
         let obj : INewUser={
           firstname : this.form.get('firstname')?.value as string,
@@ -57,13 +55,17 @@ export class RegisterComponent {
         }
         this.authService.register(obj).pipe(
           catchError((error: HttpErrorResponse) => {
+            alert("That email is already registered please Enter different email address")
             if (error.status === 500) {
               return throwError('Internal server error. Please try again later.');
             } else {
                 return throwError('Something went wrong.');
             }
           })
-        ).subscribe()
+        ).subscribe(()=>{
+          this.router.navigate(["/Login"])
+          this.manipulate.wholeTopDiv=true //აქ ჩნდება
+        })
         
   }
 
@@ -93,5 +95,10 @@ if(confirmPassword?.value!==''){
       return false;
     }
     return false
+  }
+
+  public ToLogin(){
+    this.router.navigate(['/Login']);
+    
   }
 }

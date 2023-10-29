@@ -21,15 +21,11 @@ export class FollowersComponent implements OnInit {
 
 constructor(public connectToOthersService:ConnectToOthersService,
             public subjectsService:SubjectsService,
-            private manipulationService:ManipulationService,
+            // private manipulationService:ManipulationService,
             private userDataService:UserDataService){}
 
-public headers = new HttpHeaders({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
-
   ngOnInit(): void {
-    this.connectToOthersService.getFriendRequests(this.headers).pipe(
+    this.connectToOthersService.getFriendRequests().pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 500) {
           return throwError('Internal server error. Please try again later.');
@@ -56,8 +52,7 @@ public headers = new HttpHeaders({
 
 
 
-  deleteFollower(id:number):Subscription
-  {
+  deleteFollower(id:number):Subscription{
     const handledRequest:FriendRequestWithreciverAndCreators|undefined =this.subjectsService.FollowersArray$.value.find(
       (request:FriendRequestWithreciverAndCreators)=>{
         return request.id === id}

@@ -3,7 +3,7 @@ import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
 import { Observable, from } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { JwtGuard } from 'src/auth/guards/jwt/jwt.guard';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('feed')
 export class FeedController {
@@ -17,23 +17,6 @@ create(@Body() post :FeedPost, @Request() req):Observable<FeedPost>{
     
     return this.FeedService.createPost(req.user, post)
 }
-
-
-// @Get()
-// findSelected(@Query('take') take:number=1,@Query('skip') skip : number=1):Observable<FeedPost[]> {
-//     take=take>20 ? 20 : take;
-//     return this.FeedService.findPosts(take,skip);
-// }
-
-
-
-// @Get()
-// async getPostsWithAuthors(@Query('take') take:number=1,@Query('skip') skip : number=0) {
-//   const { posts } = await this.FeedService.findPosts(take,skip);
-//   return { posts };
-// }
-
-
 
 @Get()
   getPostsWithAuthors(@Query('take') take:number=1,@Query('skip') skip : number=1):Observable<[FeedPost[], number]> {

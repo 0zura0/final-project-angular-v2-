@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserDataService } from 'src/app/shared/services/manipulateData/user-data.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subscription, throwError } from 'rxjs';
 import { FeedPostResponse } from 'src/app/shared/Interfaces/Post/feedPostResponse';
 import { WritePostService } from './services/write-post.service';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
@@ -85,13 +85,9 @@ export class WritePostComponent {
     this.manipulationService.isLoading=false; 
   }
 
-    public headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
 
-  PostDataFromTextarea(){
-    return this.writePostService.PostThePost(this.form.get('textarea')?.value as string,this.headers).pipe(
+  PostDataFromTextarea():Subscription{
+    return this.writePostService.PostThePost(this.form.get('textarea')?.value as string).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 500) {
           return throwError('Internal server error. Please try again later.');
@@ -102,7 +98,7 @@ export class WritePostComponent {
     ).subscribe()
   }
 
-  getAuthorAndPoststByid(id:number){
+  getAuthorAndPoststByid(id:number):Observable<User>{
     return this.writePostService.getAuthorAndPoststByid(id)
   }
   

@@ -4,7 +4,7 @@ import { GetpostsService } from 'src/app/shared/services/getposts/getposts.servi
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { IPost } from 'src/app/shared/Interfaces/Post/IPots';
 import { LoginService } from '../login/services/login.service';
-import { BehaviorSubject, Observable, map, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, map, switchMap, throwError } from 'rxjs';
 import { UserDataService } from 'src/app/shared/services/manipulateData/user-data.service';
 import { ManipulationService } from 'src/app/shared/services/manipulateData/manipulation.service';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
@@ -52,11 +52,10 @@ private isLoading:boolean = false;
 
   private queryParam:string = '';    //საწყისი ქვერი
   private numberOfPosts:number = 1;  //რამდენი უნდა წამოიღოს
-  private disabled:boolean = false;  // ეს რა ჩემ ფეხებათ მინდა არც ვიცი
   
   
 
-  public getposts(event:any=''){
+  public getposts(){
     this.manipulationService.isLoading = true;
     this.queryParam = `take=${this.numberOfPosts}&skip=${this.manipulationService.skipPosts}`;
 
@@ -98,7 +97,7 @@ private isLoading:boolean = false;
     const remainingHeight = documentHeight - (scrollY + windowHeight);  
     if (remainingHeight <= 1 && !this.manipulationService.isLoading) {
 
-      this.getposts(event);
+      this.getposts();
     }
   }
 
@@ -128,7 +127,7 @@ private isLoading:boolean = false;
     }
   }
 
-  deletePostById(id:number){
+  deletePostById(id:number):Subscription{
     const handledRequest =this.subjectsService.arraySubject.value.find(
       (request)=>{
         return request.id === id}

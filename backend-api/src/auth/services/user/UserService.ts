@@ -67,12 +67,6 @@ export class UserService {
         )
     }
 
-
-
-
-
-
-
     //რექვსეთი აქვს თუ არა იმას ამოწმებს და სჭირდება გამგზავნისა და მიმღების ობიექტები   {შიდა ფუნქციაა ამას ცონტროლერში არ ვიყენებთ}
     hasRequestBeenSentOrReceived(creator: User, reciver: User): Observable<boolean> {
         return from(

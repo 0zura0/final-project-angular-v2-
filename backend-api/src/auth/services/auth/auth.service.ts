@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Observable, ObservableInput, catchError, from, map, of, switchMap, throwError } from 'rxjs';
+import { Observable, from, map, of, switchMap } from 'rxjs';
 import { UserEntity } from 'src/auth/models/user.entity';
 import { User } from 'src/auth/models/user.interface';
 import { Repository } from 'typeorm';
@@ -25,12 +25,13 @@ registerAccount(user:User):Observable<User>{
            phone,
            email,
            password} = user;
-        console.log(firstname,
-            lastname,
-            nickname,
-            phone,
-            email,
-            password);
+
+        // console.log(firstname,
+        //     lastname,
+        //     nickname,
+        //     phone,
+        //     email,
+        //     password);
         
 return this.hashPassword(password).pipe(
     switchMap((hashPassword:string) => {

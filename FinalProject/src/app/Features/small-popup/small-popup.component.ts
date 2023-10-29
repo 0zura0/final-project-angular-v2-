@@ -4,9 +4,6 @@ import { UserDataService } from 'src/app/shared/services/manipulateData/user-dat
 import { FormBuilder } from '@angular/forms';
 import { BehaviorSubject, Subscription, from, map, switchMap, take } from 'rxjs';
 import { LoginService } from '../login/services/login.service';
-import { HttpHeaders } from '@angular/common/http';
-import { MapType } from '@angular/compiler';
-import { IUser } from 'src/app/shared/Interfaces/Iauthorization/user.model';
 import { SubjectsService } from 'src/app/shared/services/subjects/subjects.service';
 import { MatDialogModule } from '@angular/material/dialog';
 
@@ -43,13 +40,11 @@ fullname='';
   ngOnInit(): void {
 
     this.userSubscription = this.loginService.userFullImagePath.subscribe((fullimagePath:string) => {
-      this.subjectsService.newpath$.next(fullimagePath);
-      
+      // this.subjectsService.newpath$.next(fullimagePath);
       this.loginService.UserFullName.subscribe((fullname:string) => {
         this.fullname=fullname;
         this.fullname$.next(fullname);
       })
-
     })
   }
 public ValidFileExtentions:ValifFileExtentions[] =['png' , 'jpg' , 'jpeg']
@@ -59,8 +54,8 @@ public  form = this.formBuilder.group({
   file: null,
 })
 
-onFileSelect(event:any){
-const file:File = event.target.files[0] 
+onFileSelect(event:any) {
+const file:File = event.target.files[0]
 if(!file) return;
 const Formdata = new FormData();
 Formdata.append('file',file,file.name)

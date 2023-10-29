@@ -2,14 +2,12 @@ import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Reque
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { Observable, of, switchMap } from 'rxjs';
-import { JwtGuard } from 'src/auth/guards/jwt/jwt.guard';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { saveImageFileToStorage } from 'src/auth/helpers/imageStorage';
 import { FriendRequest, friendRequestStatus } from 'src/auth/models/friendRequest';
 import { User } from 'src/auth/models/user.interface';
 import { AuthService } from 'src/auth/services/auth/auth.service';
 import { UserService } from 'src/auth/services/user/UserService';
-import { FeedPost } from 'src/feed/models/post.interface';
-import { UpdateResult } from 'typeorm';
 
 @Controller('user')
 export class UserController {
@@ -117,6 +115,7 @@ export class UserController {
         return this.userService.getFriendRequestFromResipients(req.user)
     }
 
+    
 
     @Get("GiveMeUserByName/:name")
     getUserByName(@Param('name') username:string): Observable<User |{error:string}>{

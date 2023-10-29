@@ -27,15 +27,14 @@ export class ConnectToOthersService {
       )
   }
 
-  getFriendRequests(headers:HttpHeaders):Observable<FriendRequestWithreciverAndCreators[]>{
-    return this.http.get<FriendRequestWithreciverAndCreators[]>(`${enviroment.ApiUrl}/user/friend-request/me/recivedRequests`,{headers:headers});
+  getFriendRequests():Observable<FriendRequestWithreciverAndCreators[]>{
+    return this.http.get<FriendRequestWithreciverAndCreators[]>(`${enviroment.ApiUrl}/user/friend-request/me/recivedRequests`);
   }
 
-  ResponseToFriendRequest(id: number,headers:HttpHeaders,statusResponse:'accepted' | 'declined'):Observable<FriendRequest | {error:string}>{
+  ResponseToFriendRequest(id: number,statusResponse:'accepted' | 'declined'):Observable<FriendRequest | {error:string}>{
     return this.http.put<FriendRequest>(
       `${enviroment.ApiUrl}/user/friend-request/response/${id}`,
       {status:statusResponse},
-      {headers:headers}
       )
   }
 

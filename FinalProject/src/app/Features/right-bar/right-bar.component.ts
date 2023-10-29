@@ -33,13 +33,11 @@ export class RightBarComponent implements OnInit {
     })
   ).subscribe((value)=>{
     this.chuckNorrisFact$.next(value.value as string);
-    
   }
   )
-   
   }
 
-  public openPlogOut(){
+  public openPlogOut():void{
     this.dialog.open(SmallPopupComponent,{
       width:'450px',
       height:'400px',

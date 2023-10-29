@@ -2,11 +2,9 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { CommonModule } from '@angular/common';
 import { SearchserviceService } from '../topcomponent/services/searchservice.service';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ObserversModule } from '@angular/cdk/observers';
 import { FriendRequest, friendRequestStatus } from 'src/app/shared/Interfaces/FriendRequestedStatus/status.model';
-import { BehaviorSubject, Observable, Subscription, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, take, tap, throwError } from 'rxjs';
 import { ConnectToOthersService } from './RequestProfile/connect-to-others.service';
-import { IUser } from 'src/app/shared/Interfaces/Iauthorization/user.model';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 @Component({
@@ -17,6 +15,8 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./request-profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+
 export class RequestProfileComponent implements OnInit , OnDestroy {
 
 public friendRequestStatus$ = new BehaviorSubject<string | null>('')

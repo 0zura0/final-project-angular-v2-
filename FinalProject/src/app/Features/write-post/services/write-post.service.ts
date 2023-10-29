@@ -16,8 +16,8 @@ export class WritePostService {
               public subjectsService:SubjectsService  ) { }
 
   
-  public PostThePost(body: string,Headers:HttpHeaders):Observable<IUseresPonse>{
-    return this.http.post<IUseresPonse>(`${enviroment.ApiUrl}/feed`,{"body":body},{headers:Headers})
+  public PostThePost(body: string):Observable<IUseresPonse>{
+    return this.http.post<IUseresPonse>(`${enviroment.ApiUrl}/feed`,{"body":body})
   }
 
   getAuthorAndPoststByid(id:number):Observable<User>{

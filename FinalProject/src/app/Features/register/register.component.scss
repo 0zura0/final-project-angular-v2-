@@ -1,7 +1,9 @@
+@import '../../shared/scss/pallete';
 * {
     margin: 0;
     padding: 0;
 }
+
 
 .box {
     // height:100vh;
@@ -60,7 +62,7 @@
             width: 100%;
             text-align: end;
         }
-        button{
+        button:not(.navigateToLogIn){
             width: 120px;
             height: 40px;
             align-self: center;
@@ -71,8 +73,20 @@
             font-size: 17px;
             cursor: pointer;
         }
-        button:hover{
+        button:hover:not(.navigateToLogIn){
             background-color: rgb(104, 6, 195);;
+        }
+        .navigateToLogIn{
+            background-color: white;
+            color: blue;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: center;
+            background-color: $bakground;
+            border: none;
+        }
+        .navigateToLogIn:hover{
+            text-decoration: underline;
         }
     }
 

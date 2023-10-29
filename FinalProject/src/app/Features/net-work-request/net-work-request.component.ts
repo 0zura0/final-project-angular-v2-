@@ -24,18 +24,22 @@ import { SubjectsService } from 'src/app/shared/services/subjects/subjects.servi
 export class NetWorkRequestComponent implements OnInit {
   
 
-  public headers = new HttpHeaders({
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
+  // public headers = new HttpHeaders({
+  //   'Authorization': `Bearer ${localStorage.getItem('token')}`
+  // });
 
   constructor(private manipulationService:ManipulationService,
               public connectToOthersService:ConnectToOthersService,
-              private loginService:LoginService,
+              // private loginService:LoginService,
               public subjectsService:SubjectsService){}
 
 // public localRequestArray$ = new BehaviorSubject<FriendRequestWithreciverAndCreators[]>([]);
 
   ngOnInit(): void {
+
+    console.log("requests array");
+    console.log(this.connectToOthersService.friendRequest);
+    
     this.subjectsService.localRequestArray$.next(this.connectToOthersService.friendRequest)
   }
  
@@ -65,7 +69,7 @@ export class NetWorkRequestComponent implements OnInit {
     }
     this.subjectsService.RequestarrayLenght$.next(unhandledRequest.length)
 
-    return this.connectToOthersService.ResponseToFriendRequest(id,this.headers,statusResponse).pipe(take(1)).pipe(
+    return this.connectToOthersService.ResponseToFriendRequest(id,statusResponse).pipe(take(1)).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 500) {
           return throwError('Internal server error. Please try again later.');

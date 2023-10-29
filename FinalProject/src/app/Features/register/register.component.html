@@ -6,7 +6,6 @@
                 <span><span *ngIf="hasError('firstname','required')" class="asterisk">*</span>Firstname</span>
                 <input formControlName="firstname" type="text">
             </div>
-            <!-- <span *ngIf="hasError('firstname','email')" class="warn">Email is incorret, it should contain @gmail.com</span> -->
             <span *ngIf="hasError('firstname','required')" class="warn">This Field is Required</span>
         </div>
 
@@ -15,7 +14,6 @@
                 <span><span *ngIf="hasError('lastname','required')" class="asterisk">*</span>Lastname</span>
                 <input formControlName="lastname" type="text">
             </div>
-            <!-- <span *ngIf="hasError('firstname','email')" class="warn">Email is incorret, it should contain @gmail.com</span> -->
             <span *ngIf="hasError('lastname','required')" class="warn">This Field is Required</span>
         </div>
 
@@ -73,6 +71,7 @@
             <span *ngIf="hasError('phone','required')" class="warn">This Field is Required</span>
         </div>
         <button [disabled]="disabled()" (click)="onSubmit()">{{action}}</button>
+        <button  (click)="ToLogin()" class="navigateToLogIn">Return to LogIn Page</button>
     </div>
 
 </div>

@@ -44,22 +44,33 @@ export class TopcomponentComponent implements OnInit {
   searchThePersonByName():void{
     if(this.form.valid){
       this.searchserviceService.getUserByName(this.form.get('search')?.value as string).subscribe(result=>{
-        result = result as IUser
+        result = result as IUser  //გადაიკასტება
+
         if(result.firstname ==this.userDataService.firstname && result.lastname ==this.userDataService.lastname){
         alert("you can not search yourself")
           return
         }
+
         if('error' in result) {
           alert('there is not person with name '+this.form.get('search')?.value as string)
           this.form.get('search')?.setValue("")
         }else{
+
           if(!result.imagePath){
             result.imagePath =this.loginService.getDefaultFullImagePath()
           }else{
             result.imagePath =this.loginService.getFullImagePath(result.imagePath)
           }
-          this.searchserviceService.SearchUserSubject$.next(result as IUser)
+
+
+          console.log("gadacemuli adaminais objecti");
+          console.log(result);
+          this.searchserviceService.SearchUserSubject$.next(result as IUser)  //აქ გადაეცემა ადამიანი
+
+
         }
+
+
         this.form.get('search')?.setValue('')
         this.OpenSearchWindow()
       })
@@ -73,7 +84,7 @@ export class TopcomponentComponent implements OnInit {
     })
   }
 
-  public openDiealogue(){
+  public openDiealogue():void{
     this.dialog.open(WritePostComponent,{
       width:'450px',
       height:'400px',

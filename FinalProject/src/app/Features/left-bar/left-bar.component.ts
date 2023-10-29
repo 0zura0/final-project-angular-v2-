@@ -34,19 +34,19 @@ private frienrequestSubscription!: Subscription;
               private manipulatesaerviuce:ManipulationService,
               public subjectsService:SubjectsService,
               private userDataService:UserDataService,
-              private sritePostService:WritePostService,
+              // private sritePostService:WritePostService,
               private dialog: MatDialog,
               private overlay: Overlay,
               public connectToOthersService:ConnectToOthersService){}
   ngOnDestroy(): void {
     this.frienrequestSubscription.unsubscribe();
   }
-  public headers = new HttpHeaders({
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
+  // public headers = new HttpHeaders({
+  //   'Authorization': `Bearer ${localStorage.getItem('token')}`
+  // });
 
   ngOnInit(): void {
-    this.frienrequestSubscription = this.connectToOthersService.getFriendRequests(this.headers).pipe(
+    this.frienrequestSubscription = this.connectToOthersService.getFriendRequests().pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 500) {
           return throwError('Internal server error. Please try again later.');
@@ -57,7 +57,7 @@ private frienrequestSubscription!: Subscription;
     ).subscribe((friendRequests:FriendRequestWithreciverAndCreators[])=>{
       
       this.connectToOthersService.friendRequest=friendRequests.filter((friendRequest:FriendRequestWithreciverAndCreators)=>{
-        return friendRequest.status ==="pending"
+        return friendRequest.status ==="pending" && friendRequest.creator.firstname!==this.userDataService.firstname && friendRequest.creator.lastname!==this.userDataService.lastname
       });
 
       this.subjectsService.RequestarrayLenght$.next(this.connectToOthersService.friendRequest.length)
@@ -65,7 +65,7 @@ private frienrequestSubscription!: Subscription;
 
   }
 
-  Seefollowers(){
+  Seefollowers():void{
    this.manipulatesaerviuce.followersDialog= this.dialog.open(FollowersComponent,{
       width:'550px',
     })
@@ -73,7 +73,7 @@ private frienrequestSubscription!: Subscription;
 
   updateNetworkinfo(): void {
     setInterval(()=>{
-      this.frienrequestSubscription = this.connectToOthersService.getFriendRequests(this.headers).pipe(
+      this.frienrequestSubscription = this.connectToOthersService.getFriendRequests().pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 500) {
             return throwError('Internal server error. Please try again later.');
@@ -115,8 +115,9 @@ private frienrequestSubscription!: Subscription;
 
   private overlayRef!: OverlayRef | null;
 
-  OpenNetworkPop(event: Event) {
+  OpenNetworkPop(event: Event):void {
     const button = event.target as HTMLElement;
+    
     if (button) {
       const positionStrategy = this.overlay.position()
         .flexibleConnectedTo(button)
